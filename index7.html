@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SESAP - Preencher sesap.pdf (até 5 procedimentos)</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <style>
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f5f5f5;margin:0;padding:20px}
+        .container{max-width:1000px;margin:0 auto}
+        .header{background:#2180b9;color:#fff;padding:24px;border-radius:8px;text-align:center;margin-bottom:24px}
+        .form-section{background:#fff;border-radius:8px;padding:20px;margin-bottom:16px;box-shadow:0 2px 4px rgba(0,0,0,.1)}
+        .section-title{font-size:18px;font-weight:600;color:#2180b9;margin-bottom:12px;border-bottom:2px solid #2180b9;padding-bottom:6px}
+        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:12px}
+        .form-row.full{grid-template-columns:1fr}
+        .form-group{display:flex;flex-direction:column}
+        label{font-weight:600;margin-bottom:4px;font-size:14px}
+        input[type=text],input[type=date]{padding:10px;border:1px solid #ddd;border-radius:6px;font-size:14px}
+        input:focus{outline:none;border-color:#2180b9;box-shadow:0 0 0 2px rgba(33,128,185,.15)}
+        .procedure-card{background:#f9f9f9;border-radius:6px;padding:12px;margin-bottom:10px;border-left:4px solid #2180b9}
+        button{border:none;border-radius:6px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;transition:.2s}
+        .btn-primary{background:#2180b9;color:#fff;width:100%}
+        .btn-primary:hover{background:#1a6fa3}
+        .btn-secondary{background:#95a5a6;color:#fff;margin-top:8px}
+        .btn-secondary:hover{background:#7f8c8d}
+        .btn-remove{background:#e74c3c;color:#fff;margin-top:8px}
+        .btn-remove:hover{background:#c0392b}
+        .status{margin-top:16px;padding:10px;border-radius:6px;display:none}
+        .status.ok{background:#d4edda;color:#155724;border:1px solid #c3e6cb}
+        .status.err{background:#f8d7da;color:#721c24;border:1px solid #f5c6cb}
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🏥 SESAP - Preencher sesap.pdf</h1>
+        <p>Gera 2 páginas (cirurgião e anestesista) para até 5 procedimentos</p>
+    </div>
+
+    <form id="sesapForm">
+        <!-- DADOS GERAIS -->
+        <div class="form-section">
+            <div class="section-title">📋 Dados gerais</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Hospital</label>
+                    <input type="text" id="hospital" value="HOSPITAL RIO GRANDE">
+                </div>
+                <div class="form-group">
+                    <label>Data</label>
+                    <input type="date" id="data">
+                </div>
+            </div>
+        </div>
+
+        <!-- PACIENTE -->
+        <div class="form-section">
+            <div class="section-title">👤 Paciente</div>
+            <div class="form-row full">
+                <div class="form-group">
+                    <label>Nome do paciente</label>
+                    <input type="text" id="paciente" placeholder="Nome completo">
+                </div>
+            </div>
+        </div>
+
+        <!-- EQUIPE -->
+        <div class="form-section">
+            <div class="section-title">👨‍⚕️ Equipe</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Cirurgião</label>
+                    <input type="text" id="cirurgiao" value="José Augusto">
+                </div>
+                <div class="form-group">
+                    <label>Médico auxiliar</label>
+                    <input type="text" id="auxiliar" placeholder="Nome do auxiliar">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Empresa cirurgião</label>
+                    <input type="text" id="empresaCirurgiao" value="Targino & Rocha">
+                </div>
+                <div class="form-group">
+                    <label>Anestesista</label>
+                    <input type="text" id="anestesista" value="Thiago José">
+                </div>
+            </div>
+            <div class="form-row full">
+                <div class="form-group">
+                    <label>Empresa anestesista</label>
+                    <input type="text" id="empresaAnestesia" value="COOPANEST RN">
+                </div>
+            </div>
+        </div>
+
+        <!-- PROCEDIMENTOS -->
+        <div class="form-section">
+            <div class="section-title">🔧 Procedimentos (máx. 5)</div>
+            <div id="procedures"></div>
+            <button type="button" class="btn-secondary" onclick="addProcedure()">+ Adicionar procedimento</button>
+        </div>
+
+        <button type="submit" class="btn-primary">📄 Gerar PDF (2 páginas)</button>
+        <div id="status" class="status"></div>
+    </form>
+</div>
+
+<script>
+const { PDFDocument } = PDFLib;
+let procCount = 0;
+
+// Pré-preencher data e um procedimento
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('data').value = new Date().toISOString().split('T')[0];
+    addProcedure();
+});
+
+function addProcedure() {
+    if (procCount >= 5) {
+        showStatus('Máximo de 5 procedimentos por vez.', false);
+        return;
+    }
+    procCount++;
+    const wrap = document.getElementById('procedures');
+    const div = document.createElement('div');
+    div.className = 'procedure-card';
+    div.id = 'proc-'+procCount;
+    div.innerHTML = `
+        <div style="font-weight:bold;margin-bottom:6px">Procedimento ${procCount}</div>
+        <div class="form-row full">
+            <div class="form-group">
+                <label>Descrição / Cirurgia</label>
+                <input type="text" id="desc${procCount}" placeholder="Ex: Trombectomia de artéria femoral">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Grupo</label>
+                <input type="text" id="grupo${procCount}" value="GRUPO V">
+            </div>
+        </div>
+        <button type="button" class="btn-remove" onclick="this.parentElement.remove()">Remover</button>
+    `;
+    wrap.appendChild(div);
+}
+
+document.getElementById('sesapForm').addEventListener('submit', async e=>{
+    e.preventDefault();
+    await gerarPDFUnicoComTemplate();
+});
+
+function showStatus(msg, ok){
+    const s = document.getElementById('status');
+    s.textContent = msg;
+    s.className = 'status ' + (ok ? 'ok' : 'err');
+    s.style.display = 'block';
+}
+
+async function gerarPDFUnicoComTemplate(){
+    const paciente = document.getElementById('paciente').value.trim();
+    if(!paciente){ showStatus('Informe o nome do paciente.',false); return; }
+
+    const procedimentos=[];
+    for(let i=1;i<=procCount;i++){
+        const d=document.getElementById('desc'+i);
+        const g=document.getElementById('grupo'+i);
+        if(d && d.value.trim()){
+            procedimentos.push({descricao:d.value.trim(),grupo:(g?g.value.trim():'')});
+        }
+    }
+    if(!procedimentos.length){ showStatus('Adicione ao menos um procedimento.',false); return; }
+    if(procedimentos.length>5){ showStatus('Use no máximo 5 procedimentos por vez.',false); return; }
+
+    const dados={
+        hospital: document.getElementById('hospital').value,
+        data: document.getElementById('data').value,
+        paciente,
+        cirurgiao: document.getElementById('cirurgiao').value,
+        auxiliar: document.getElementById('auxiliar').value,
+        empresaCirurgiao: document.getElementById('empresaCirurgiao').value,
+        anestesista: document.getElementById('anestesista').value,
+        empresaAnestesia: document.getElementById('empresaAnestesia').value
+    };
+    const equipeStr = [dados.cirurgiao,dados.auxiliar,dados.anestesista].filter(Boolean).join(', ');
+
+    // carrega o novo sesap.pdf
+    const resp = await fetch('sesap.pdf');
+    if (!resp.ok) {
+        alert('Erro ao carregar sesap.pdf: ' + resp.status);
+        showStatus('Erro ao carregar sesap.pdf ('+resp.status+').',false);
+        return;
+    }
+    const bytes = await resp.arrayBuffer();
+    const baseDoc = await PDFDocument.load(bytes);
+
+    // cria doc de saída com 2 páginas (cirurgião + anestesista)
+    const pdfOut = await PDFDocument.create();
+    const [pageCir] = await pdfOut.copyPages(baseDoc,[0]);
+    pdfOut.addPage(pageCir);
+    const [pageAn]  = await pdfOut.copyPages(baseDoc,[0]);
+    pdfOut.addPage(pageAn);
+
+    const form = pdfOut.getForm();
+
+    const nomesProc  = ['PROCEDIMENTO_01','PROCEDIMENTO_02','PROCEDIMENTO_03','PROCEDIMENTO_04','PROCEDIMENTO_05'];
+    const nomesPac   = ['PACIENTE01','PACIENTE02','PACIENTE03','PACIENTE04','PACIENTE05'];
+    const nomesGrupo = ['GRUPO01','GRUPO02','GRUPO03','GRUPO04','GRUPO05']; // se você tiver usado grupo_proc01..05, troque aqui
+    const nomesMedP  = ['MEDICO_PRINC_01','MEDICO_PRINC_02','MEDICO_PRINC_03','MEDICO_PRINC_04','MEDICO_PRINC_05'];
+    const nomesMedA  = ['MEDICO_AUX_01','MEDICO_AUX_02','MEDICO_AUX_03','MEDICO_AUX_04','MEDICO_AUX_05'];
+
+    // 1) preenche cabeçalho (cirurgião)
+    try{
+        form.getTextField('HOSPITAL').setText(dados.hospital);
+        form.getTextField('EMPRESA').setText(dados.empresaCirurgiao);
+        form.getTextField('DATA').setText(dados.data);
+        form.getTextField('EQUIPE').setText(equipeStr);
+    }catch(e){ console.log('Erro cabeçalho cirurgião',e); }
+
+    // 2) linhas de procedimentos para equipe cirúrgica
+    procedimentos.forEach((p,idx)=>{
+        try{
+            form.getTextField(nomesProc[idx]).setText(p.descricao);
+            form.getTextField(nomesPac[idx]).setText(dados.paciente);
+            form.getTextField(nomesGrupo[idx]).setText(p.grupo);
+            form.getTextField(nomesMedP[idx]).setText(dados.cirurgiao);
+            form.getTextField(nomesMedA[idx]).setText(dados.auxiliar || '');
+        }catch(e){ console.log('Erro linha cirurgião',idx+1,e); }
+    });
+
+    // 3) ajustar para página do anestesista (empresa e médico principal)
+    try{
+        form.getTextField('EMPRESA').setText(dados.empresaAnestesia);
+        procedimentos.forEach((p,idx)=>{
+            form.getTextField(nomesMedP[idx]).setText(dados.anestesista);
+            form.getTextField(nomesMedA[idx]).setText('');
+        });
+    }catch(e){ console.log('Erro anestesista',e); }
+
+    const finalBytes = await pdfOut.save();
+    const blob = new Blob([finalBytes],{type:'application/pdf'});
+    const url = URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;
+    a.download='SESAP_'+(dados.data||'hoje')+'.pdf';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showStatus('PDF gerado com sucesso (até 5 procedimentos).',true);
+}
+</script>
+</body>
+</html>
