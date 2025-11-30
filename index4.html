@@ -87,4 +87,137 @@
   </div>
 
   <div class="card">
-    <div class="title">Procedimentos (
+    <div class="title">Procedimentos (máx. 5)</div>
+    <div id="procs"></div>
+    <button type="button" class="btn-add" onclick="addProc()">+ Adicionar procedimento</button>
+  </div>
+
+  <button class="btn-main" onclick="gerar()">📄 Gerar PDF (2 páginas)</button>
+  <div id="status" class="status"></div>
+</div>
+
+<script>
+const { PDFDocument } = PDFLib;
+let count = 0;
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  document.getElementById('data').value = new Date().toISOString().split('T')[0];
+  addProc();
+});
+
+function addProc(){
+  if(count>=5){ msg('Máximo de 5 procedimentos por vez.',false); return; }
+  count++;
+  const d=document.createElement('div');
+  d.className='proc';
+  d.id='p'+count;
+  d.innerHTML=`
+    <div style="font-weight:bold;margin-bottom:4px">Procedimento ${count}</div>
+    <label>Descrição / cirurgia</label>
+    <input id="desc${count}" placeholder="Ex: Trombectomia de artéria femoral direita">
+    <label style="margin-top:6px">Grupo</label>
+    <input id="grupo${count}" value="GRUPO V">
+    <button type="button" class="btn-rem" onclick="this.parentElement.remove()">Remover</button>
+  `;
+  document.getElementById('procs').appendChild(d);
+}
+
+function msg(t,ok){
+  const s=document.getElementById('status');
+  s.textContent=t;
+  s.className='status '+(ok?'ok':'err');
+  s.style.display='block';
+}
+
+async function gerar(){
+  const paciente=document.getElementById('paciente').value.trim();
+  if(!paciente){ msg('Informe o nome do paciente.',false); return; }
+
+  const procs=[];
+  for(let i=1;i<=5;i++){
+    const d=document.getElementById('desc'+i);
+    const g=document.getElementById('grupo'+i);
+    if(d && d.value.trim()){
+      procs.push({desc:d.value.trim(),grupo:g?g.value.trim():''});
+    }
+  }
+  if(!procs.length){ msg('Adicione ao menos 1 procedimento.',false); return; }
+
+  const dados={
+    hospital:document.getElementById('hospital').value,
+    data:document.getElementById('data').value,
+    paciente,
+    cir:document.getElementById('cirurgiao').value,
+    aux:document.getElementById('auxiliar').value,
+    empCir:document.getElementById('empresaCir').value,
+    anest:document.getElementById('anest').value,
+    empAnest:document.getElementById('empresaAnest').value
+  };
+  const equipe=[dados.cir,dados.aux,dados.anest].filter(Boolean).join(', ');
+
+  const resp=await fetch('sesapnew.pdf');
+  if(!resp.ok){ alert('Erro ao carregar sesapnew.pdf: '+resp.status); msg('Erro ao carregar sesapnew.pdf.',false); return;}
+  const bytes=await resp.arrayBuffer();
+  const base=await PDFDocument.load(bytes);
+  const out=await PDFDocument.create();
+
+  const [pBaseCir]=await out.copyPages(base,[0]);
+  out.addPage(pBaseCir);
+  const [pBaseAn]=await out.copyPages(base,[0]);
+  out.addPage(pBaseAn);
+
+  const form=out.getForm();
+
+  // cabeçalhos (mesmos campos nas 2 páginas)
+  try{
+    form.getTextField('HOSPITAL').setText(dados.hospital);
+    form.getTextField('DATA').setText(dados.data);
+  }catch(e){}
+
+  // página cirurgião
+  try{
+    form.getTextField('EMPRESA').setText(dados.empCir);
+    form.getTextField('EQUIPE').setText(equipe);
+  }catch(e){}
+
+  const nomesProc=['PROCEDIMENTO_01','PROCEDIMENTO_02','PROCEDIMENTO_03','PROCEDIMENTO_04','PROCEDIMENTO_05'];
+  const nomesPac=['PACIENTE01','PACIENTE02','PACIENTE03','PACIENTE04','PACIENTE05'];
+  const nomesGrupo=['grupo_proc01','grupo_proc02','grupo_proc03','grupo_proc04','grupo_proc05'];
+  const nomesMedP=['MEDICO_PRINC_01','MEDICO_PRINC_02','MEDICO_PRINC_03','MEDICO_PRINC_04','MEDICO_PRINC_05'];
+  const nomesMedA=['MEDICO_AUX_01','MEDICO_AUX_02','MEDICO_AUX_03','MEDICO_AUX_04','MEDICO_AUX_05'];
+
+  // preenche linhas (como os campos são compartilhados, o que vale é o último valor setado)
+  procs.forEach((p,i)=>{
+    try{
+      form.getTextField(nomesProc[i]).setText(p.desc);
+      form.getTextField(nomesPac[i]).setText(dados.paciente);
+      form.getTextField(nomesGrupo[i]).setText(p.grupo);
+      form.getTextField(nomesMedP[i]).setText(dados.cir);
+      form.getTextField(nomesMedA[i]).setText(dados.aux||'');
+    }catch(e){}
+  });
+
+  // agora ajusta para página do anestesista: muda EMPRESA e médico principal
+  try{
+    form.getTextField('EMPRESA').setText(dados.empAnest);
+    procs.forEach((p,i)=>{
+      form.getTextField(nomesMedP[i]).setText(dados.anest);
+      form.getTextField(nomesMedA[i]).setText(''); // auxiliar em branco
+    });
+  }catch(e){}
+
+  const final=await out.save();
+  const blob=new Blob([final],{type:'application/pdf'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='SESAP_'+(dados.data||'hoje')+'.pdf';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  msg('PDF gerado. Para mais de 5 procedimentos, repita o processo.',true);
+}
+</script>
+</body>
+</html>
