@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>SESAP - 5 procedimentos por vez</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <style>
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f5f5f5;margin:0;padding:20px}
+    .container{max-width:900px;margin:0 auto}
+    .card{background:#fff;border-radius:8px;padding:18px;margin-bottom:14px;box-shadow:0 2px 4px rgba(0,0,0,.08)}
+    h1{text-align:center;background:#2180b9;color:#fff;padding:16px;border-radius:8px;margin:0 0 18px}
+    .title{font-weight:600;color:#2180b9;margin-bottom:10px;border-bottom:2px solid #2180b9;padding-bottom:4px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px}
+    .row.full{grid-template-columns:1fr}
+    label{font-size:13px;font-weight:600;margin-bottom:4px;display:block}
+    input{width:100%;padding:8px;border:1px solid #ddd;border-radius:5px;font-size:13px}
+    input:focus{outline:none;border-color:#2180b9;box-shadow:0 0 0 2px rgba(33,128,185,.15)}
+    .proc{background:#f9f9f9;border-radius:6px;padding:10px;margin-bottom:8px;border-left:4px solid #2180b9}
+    button{border:none;border-radius:6px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer}
+    .btn-main{width:100%;background:#2180b9;color:#fff;margin-top:6px}
+    .btn-main:hover{background:#1a6fa3}
+    .btn-add{background:#95a5a6;color:#fff;margin-top:6px}
+    .btn-add:hover{background:#7f8c8d}
+    .btn-rem{background:#e74c3c;color:#fff;margin-top:6px}
+    .btn-rem:hover{background:#c0392b}
+    .status{margin-top:10px;padding:8px;border-radius:6px;display:none;font-size:13px}
+    .ok{background:#d4edda;color:#155724;border:1px solid #c3e6cb}
+    .err{background:#f8d7da;color:#721c24;border:1px solid #f5c6cb}
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>SESAP - Preencher sesapnew.pdf (até 5 procedimentos)</h1>
+
+  <div class="card">
+    <div class="title">Dados gerais</div>
+    <div class="row">
+      <div>
+        <label>Hospital</label>
+        <input id="hospital" value="HOSPITAL RIO GRANDE">
+      </div>
+      <div>
+        <label>Data</label>
+        <input type="date" id="data">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="title">Paciente</div>
+    <div class="row full">
+      <div>
+        <label>Nome do paciente</label>
+        <input id="paciente" placeholder="Nome completo">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="title">Equipe</div>
+    <div class="row">
+      <div>
+        <label>Cirurgião</label>
+        <input id="cirurgiao" value="José Augusto">
+      </div>
+      <div>
+        <label>Médico auxiliar</label>
+        <input id="auxiliar" placeholder="Nome do auxiliar">
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label>Empresa cirurgião</label>
+        <input id="empresaCir" value="Targino & Rocha">
+      </div>
+      <div>
+        <label>Anestesista</label>
+        <input id="anest" value="Thiago José">
+      </div>
+    </div>
+    <div class="row full">
+      <div>
+        <label>Empresa anestesista</label>
+        <input id="empresaAnest" value="COOPANEST RN">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="title">Procedimentos (
