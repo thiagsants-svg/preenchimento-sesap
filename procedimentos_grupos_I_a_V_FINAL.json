@@ -798,5 +798,17 @@
   {
     "procedimento": "INSTALAÇÃO / IMPLANTE DE PAM INVASIVA",
     "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TROMBECTOMIA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "URETERÓLISE ABERTA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "URETERÓLISE POR VIDEOLAPAROSCOPIA",
+    "grupo": "Grupo IV"
   }
 ]
