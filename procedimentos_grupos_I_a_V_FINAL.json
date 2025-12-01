@@ -1,0 +1,802 @@
+[
+  {
+    "procedimento": "ADENOIDECTOMIA",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "AMIGDALECTOMIA",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "AMPUTAÇÃO DE DEDO (POR UNIDADE TOPOGRÁFICA)",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "ANGIOGRAFIA POR CATETER INCLUINDO ATÉ 3 VASOS",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "APÊNDICE PRÉ-AURICULAR",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "BIOPSIA DOS MÚSCULOS",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "CATETERISMO DE VEIA CENTRAL – POR PUNÇÃO",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "CAUTERIZAÇÃO (QUÍMICA OU ELÉTRICA)",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "CERCLAGEM DE COLO DE ÚTERO",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "CISTO PILONIDAL",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "CONIZAÇÃO",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "CURETAGEM DE COLO DE ÚTERO",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "CURETAGEM DO MOLUSCO CONTAGIOSO",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "DILATAÇÃO DIGITAL OU INSTRUMENTAL DO ANUS",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "DILATAÇÃO URETRAL",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "DRENAGEM DE ABSCESSO OU PERIRRENAL",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "ELETROCOAGULAÇÃO DE LESÃO CUTÂNEA – GRUPO DE ATÉ 5 LESÕES",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "ELETROCOAGULAÇÃO DE LESÕES CUTÂNEAS (VERRUGAS GENITAIS)",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "EXERESE DE CISTO SACRO-COCCIGEO",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "EXERESE DE CISTO VAGINAL",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "EXERESE DE GLÂNDULA DE BARTHOLIN / SKENE",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "EXERESE DE HIGROMA CÍSTICO",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "EXERESE DE TUMOR DE PELE",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "FASCIECTOMIA",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "FISTULECTOMIA / FISTULOTOMIA ANAL",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "FRENECTOMIA",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "GRANDES CISTOS SEBÁCEOS",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "HEMORROIDECTOMIA",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "INCISÃO E DRENAGEM DE ABSCESSO, CELULITE, FOLICULITE",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "LAQUEADURA TUBÁRIA",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "LIPOMAS GIGANTES",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "MANIPULAÇÃO ARTICULAR",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "MIOMECTOMIA",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "OOFORECTOMIA / OOFOROPLASTIA",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "OSTEOTOMIA DE OSSOS DA MÃO E/OU DO PÉ",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "OSTEOTOMIA DE OSSOS LONGOS EXCETO DA MÃO E DO PÉ",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "PLÁSTICA DE PEQUENOS LÁBIOS / HIPERTROFIA – CORREÇÃO CIRÚRGICA",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "POSTECTOMIA / PLÁSTICA DE FREIO BÁLANO-PREPUCIAL",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "ENTERECTOMIA (QUALQUER SEGMENTO, LIMITADO A 1) — complemento de grande cirurgia intestinal",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "ENTEROANASTOMOSE (QUALQUER SEGMENTO, LIMITADO A 1) — complemento de grande cirurgia intestinal",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "ENTEROPEXIA (QUALQUER SEGMENTO, LIMITADO A 1) — complemento de grande cirurgia intestinal",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "PUNÇÃO PERCUTÂNEA DE ÓRGÃOS, CAV OU ESP ANATÔMICOS (ACESSO CENTRAL)",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "RESSECÇÃO DE CISTO SINOVIAL",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "RETIRADA DE CORPO ESTRANHO",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "RETIRADA DE FIO OU PINO INTRA-ÓSSEO",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "RETIRADA DE PLACA E/OU PARAFUSOS",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "RETIRADA ENDOSCÓPICA DE CATETER DUPLO J",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "SALPINGECTOMIA",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "SEPTOPLASTIA NASAL",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "SINUSOTOMIA UNI / BILATERAL",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "SUTURA DE PEQUENOS FERIMENTOS C/ OU SEM DEBRIDAMENTO",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "TENÓLISE",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "TENOSINOVECTOMIA EM MEMBRO SUPERIOR",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "TIMPANOPLASTIA (UNI / BILATERAL)",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE HÁLUX VALGUS C/ OSTEOTOMIA DO PRIMEIRO OSSO METATARSIANO",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE SÍNDROME COMPRESSIVA EM TÚNEL OSTEO FIBROSO AO NÍVEL DO CARPO",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE VARIZES (UNILATERAL)",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "TROCA DE CÂNULA DE TRAQUEOSTOMIA",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "TURBINECTOMIA UNI / BILATERAL",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "VASECTOMIA",
+    "grupo": "Grupo I"
+  },
+  {
+    "procedimento": "AMIGDALECTOMIA C/ ADENOIDECTOMIA",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "CIRURGIA DO PROLAPSO DE CÚPULA VAGINAL",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "CISTOSTOMIA CIRÚRGICA",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "COLECISTECTOMIA",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "COLOCAÇÃO DE DUPLO J",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "COLPOPERINEOCLEISE",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "COLPOPERINEOPLASTIA ANTERIOR",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "COLPOPERINEOPLASTIA POSTERIOR",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "CORREÇÃO CIRÚRGICA DE HIDROCELE UNILATERAL",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "CURETAGEM UTERINA EM MOLA HIDATIFORME",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "DEBRIDAMENTO CIRÚRGICO (POR UNIDADE TOPOGRÁFICA)",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "EXCISÃO E SUTURA DE HEMANGIOMA, LINFAGIOMA OU NEVUS",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "EXÉRESE DE CISTO DE EPIDÍDIMO UNILATERAL",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "EXÉRESE DE CISTO OU FÍSTULA TIREOGLOSSO",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "EXPLORAÇÃO CIRÚRGICA DE BOLSA ESCROTAL",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "HÉRNIAS CRURAIS",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "HÉRNIAS INGUINAIS UNILATERAIS PEQUENAS",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "HERNIOPLASTIA EPIGÁSTRICA",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "HERNIOPLASTIA INGUINAL (BILATERAL)",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "HERNIOPLASTIA INGUINAL / CRURAL (UNILATERAL)",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "HISTERECTOMIA (POR VIA VAGINAL)",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "HISTERECTOMIA TOTAL",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "LINFADENECTOMIA (INGUINAL, PÉLVICA, RETROPERITONEAL, AXILAR, CERVICAL)",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "MICROCIRURGIA OTOLÓGICA",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "ORQUIECTOMIA UNILATERAL",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "POLIDACTILIA NÃO ARTICULADA",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "PANCREATOENTEROSTOMIA — complemento de grande cirurgia intestinal",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "COLEDOCOENTEROSTOMIA — complemento de grande cirurgia intestinal",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "RECONSTRUÇÃO DE POLIA TENDINOSA DOS DEDOS DA MÃO",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "RETIRADA DE CORPO ESTRANHO INTRA-ÓSSEO",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "SINDACTILIA SIMPLES (MÃO OU PÉ)",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "TENOPLASTIA OU ENXERTO DE TENDÃO ÚNICO (ÚNICA)",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "TENORRAFIA ÚNICA DE MÃO E PÉ",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "TIREOIDECTOMIA TOTAL",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "TORACOTOMIA COM DRENAGEM FECHADA",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "TRAQUEOSTOMIA COM COLOCAÇÃO DE TÓRTESE",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE FRATURA DA CLAVÍCULA",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE FRATURA DIAFISÁRIA DE APENAS UM DOS OSSOS DO ANTEBRAÇO",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE FRATURA DO RÁDIO DISTAL EXTRA-ARTICULAR",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE FRATURA DO TORNOZELO UNIMALEOLAR",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE FRATURA ÚNICA / LESÃO FISÁRIA DOS METACARPIANOS",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE FRATURA ÚNICA / LESÃO FISÁRIA DOS METATARSIANOS",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE FRATURA / LESÃO FISÁRIA DAS FALANGES DA MÃO (COM FIXAÇÃO)",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE HÉRNIAS EPIGÁSTRICAS GRANDES",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE HÉRNIAS INCISIONAIS PEQUENAS",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE HÉRNIAS UMBILICAIS GRANDES",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "TRATAMENTO DAS LESÕES OSTEO-CONDRAIS POR FIXAÇÃO OU MOSAICOPLASTIA (JOELHO / TORNOZELO)",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "TROCA DE GESSO PÉLVICO-PODÁLICO",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "VAGINA SÉPTICA / ATRÉSICA",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "VARICOCELECTOMIA (TRAT. CIRÚRGICO DE VARICOCELE)",
+    "grupo": "Grupo II"
+  },
+  {
+    "procedimento": "ALONGAMENTO DE TENDÃO CALCÂNEO",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "AMPUTAÇÃO TRANSMETATÁRSICA / TRANSMETACARPIANA",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "ANOMALIA ANORRETAL – CORREÇÃO VIA SAGITAL POSTERIOR",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "COLECTOMIA PARCIAL",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "COLPOPERINEOPLASTIA ANTERIOR E POSTERIOR",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "CONFECÇÃO DE FÍSTULA ARTERIOVENOSA DE MEMBRO",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "DISJUNÇÃO SÍNFISE PÚBICA ISOLADA",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "ENCURTAMENTO DE OSSOS LONGOS EXCETO DA MÃO E DO PÉ",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "ENTEROANASTOMOSE",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "ENTEROTOMIA OU ENTERORRAFIA DE QUALQUER SEGMENTO",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "EPIFISIODESE POR SEGMENTO",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "FRATURA DE ESCAFOIDE",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "GASTROSTOMIA",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "HIPOSPÁDIA",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "HISTERECTOMIA C/ ANEXECTOMIA (UNI / BILATERAL)",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "INCONTINÊNCIA URINÁRIA COM SLING",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "INVAGINAÇÃO INTESTINAL – TRATAMENTO CIRÚRGICO",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "LARINGECTOMIA PARCIAL OU MICROCIRURGIA LARÍNGEA",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "MEATOPLASTIA (RETALHO CUTÂNEO)",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "NEURÓLISE",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "ORQUIDOPEXIA UNILATERAL",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "ORQUIECTOMIA BILATERAL",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "OSTEOTOMIA VALGIZANTE E TENOPLASTIA FIBULARES",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "PILOROMIOTOMIA",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "PÓLIPO RETAL – RESSECÇÃO ENDOANAL",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "RECONSTRUÇÃO DE TRÂNSITO INTESTINAL – COLOSTOMIA EM ALÇA",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "RECONSTRUÇÃO LIGAMENTAR DO TORNOZELO",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "RECONSTRUÇÃO LIGAMENTAR EXTRA-ARTICULAR DO JOELHO",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "REPARO DE ROTURA DO MANGUITO ROTADOR (ABERTO)",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "REVISÃO CIRÚRGICA DE COTO DE AMPUTAÇÃO DOS DEDOS",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "SINDACTILIA COMPLEXA",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TENOPLASTIA OU ENXERTO DE TENDÃO ÚNICO (MÚLTIPLAS)",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TENORRAFIA ÚNICA DE MÃO E PÉ (MÚLTIPLAS)",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TIMPANOPLASTIA UNI / BILATERAL",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE COALISÃO TARSAL",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE FRATURA / LESÃO FISÁRIA DE EPICÔNDILO / EPITRÓCLEA DO ÚMERO",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE FRATURA BIMALEOLAR / TRIMALEOLAR",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE FRATURA DA DIÁFISE DA TÍBIA",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE FRATURA DA DIÁFISE DO FÊMUR",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE FRATURA DA DIÁFISE DO ÚMERO",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE FRATURA DA PATELA POR FIXAÇÃO INTERNA",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE FRATURA DIAFISÁRIA DE AMBOS OS OSSOS DO ANTEBRAÇO",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE FRATURA DO RÁDIO DISTAL INTRA-ARTICULAR",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE FRATURA MÚLTIPLAS / LESÃO FISÁRIA DOS METATARSIANOS",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE FRATURAS MÚLTIPLAS / LESÃO FISÁRIA DOS METACARPIANOS",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE HÉRNIAS INCISIONAIS MÉDIAS",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE HÉRNIAS INGUINO-ESCROTAIS GRANDES",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE LESÃO AGUDA CÁPSULO-LIGAMENTAR DO MEMBRO SUPERIOR",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE LESÃO AGUDA CÁPSULO-LIGAMENTAR DO MEMBRO INFERIOR",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE LUXAÇÃO ACROMIOCLAVICULAR",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE PÉ PLANO",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE PÉ TALOVERTICAL",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE PÉ TORTO CONGÊNITO",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE POLIDACTILIA ARTICULADA",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE ROTURA DO MENISCO COM MENISCECTOMIA PARCIAL / TOTAL",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE VARIZES (BILATERAL)",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO IVE POR VIA VAGINAL",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TRATAMENTO DE FÍSTULA RETO VAGINAL",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TURBINECTOMIA BILATERAL COM SEPTOPLASTIA",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "URETERECTOMIA",
+    "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "GRUPO IV VALIDADO CONFORME LISTA FINAL DE 72 ITENS",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "ACETÁBULO",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "ANEL PÉLVICO",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "ANGIOPLASTIA",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "ARTERIORRAFIA",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "ARTROPLASTIA DE REVISÃO",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "ARTROPLASTIA METACARPOFALANGEANA",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "ARTROPLASTIA REVERSA DE OMBRO",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "ARTROPLASTIA TOTAL DE QUADRIL (REVISÃO E RECONSTRUÇÃO)",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "COLECTOMIA POR VIDEOLAPAROSCOPIA",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "DERIVAÇÃO BILO-DIGESTIVA",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "DUODENOPANCREATECTOMIA",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "ENXERTO DE NERVO",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "ESCOLIOSE",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "HÉRNIA DE DISCO",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "ILIZAROV",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "LIGAMENTO CRUZADO POSTERIOR DE JOELHO",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "MICRONEURORRAFIA",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "NEFRECTOMIA POR VIDEOLAPAROSCOPIA",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "NEFROLITOTRIPSIA PERCUTÂNEA",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "PIELOPLASTIA VIDEOLAPAROSCÓPICA",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "RETALHO MUSCULAR ROTACIONAL OU RETALHO FASCIOCUTÂNEO OU RETALHO MICROCIRÚRGICO",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "RETOSSIGMOIDECTOMIA POR VIDEOLAPAROSCOPIA",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE EPIFISIOLISTESE DO FÊMUR PROXIMAL",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE LESÃO DO PLEXO BRAQUIAL",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE LUXAÇÃO CONGÊNITA DO QUADRIL",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE LUXAÇÃO PARALÍTICA DO QUADRIL",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "URETERORRENOLITOTRIPSIA FLEXÍVEL",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "URETERORRENOLITOTRIPSIA RÍGIDA",
+    "grupo": "Grupo V"
+  },
+  {
+    "procedimento": "INSTALAÇÃO / IMPLANTE DE PAM INVASIVA",
+    "grupo": "Grupo III"
+  }
+]
