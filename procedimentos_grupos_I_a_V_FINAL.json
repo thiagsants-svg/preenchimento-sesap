@@ -680,10 +680,6 @@
     "grupo": "Grupo III"
   },
   {
-    "procedimento": "GRUPO IV VALIDADO CONFORME LISTA FINAL DE 72 ITENS",
-    "grupo": "Grupo IV"
-  },
-  {
     "procedimento": "ACETÁBULO",
     "grupo": "Grupo V"
   },
@@ -798,6 +794,302 @@
   {
     "procedimento": "INSTALAÇÃO / IMPLANTE DE PAM INVASIVA",
     "grupo": "Grupo III"
+  },
+  {
+    "procedimento": "TROMBECTOMIA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "URETERÓLISE ABERTA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "URETERÓLISE POR VIDEOLAPAROSCOPIA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "AMPUTAÇÃO A NÍVEL DE PERNA (SUPRAPATELAR / INFRAPATELAR)",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "AMPUTAÇÃO DE BRAÇO",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "APENDICECTOMIA POR VIDEOLAPAROSCOPIA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "ARTRODESE DE MÉDIAS / GRANDES ARTICULAÇÕES DE MEMBRO INFERIOR",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "ARTROPLASTIA DE ARTICULAÇÃO DA MÃO",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "ARTROPLASTIA DE OMBRO",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "ARTROPLASTIA TOTAL DE JOELHO – REVISÃO / RECONSTRUÇÃO",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "ARTROPLASTIA TOTAL PRIMÁRIA DO JOELHO",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "ARTROPLASTIA TOTAL PRIMÁRIA DO QUADRIL CIMENTADA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "ARTROPLASTIA TOTAL PRIMÁRIA DO QUADRIL NÃO CIMENTADA / HÍBRIDA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "CISTECTOMIA PARCIAL",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "CISTECTOMIA TOTAL",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "CISTOLITOSTOMIA ABERTA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "CISTOLITOTRIPSIA A LASER",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "COLECISTECTOMIA POR VIDEOLAPAROSCOPIA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "COLECISTECTOMIA COM EXPLORAÇÃO DE BILIAR",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "DACRIOCISTOTERRINOSTOMIA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "EPIFISIODESE DO FÊMUR PROXIMAL",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "ESTAPEDECTOMIA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "FRATURA COMPLEXA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "FRATURA DE ESCÁPULA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "GASTRECTOMIA PARCIAL",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "GASTRECTOMIA TOTAL",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "HISTERECTOMIA POR VIDEOLAPAROSCOPIA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "HISTEROSCOPIA CIRÚRGICA COM RESSECTOSCÓPIO",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "MARSUPIALIZAÇÃO DE CISTO RENAL UNILATERAL LAPAROSCÓPICA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "MASTOIDECTOMIA SUBTOTAL OU RADICAL MODIFICADA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "NEFRECTOMIA ABERTA (CONVENCIONAL)",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "NEFROLITOTOMIA / URETEROLITOTOMIA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "ONFALOCELE",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "OOFORECTOMIA POR VIDEOLAPAROSCOPIA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "ORQUIECTOMIA BILATERAL / UNILATERAL POR VIA LAPAROSCÓPICA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "PANCREATECTOMIA VIDEOLAPAROSCÓPICA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "PIELOPLASTIA ABERTA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "PROSTATECTOMIA ABERTA (HPB)",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "PROSTATECTOMIA RADICAL",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "PROSTATECTOMIA SIMPLES (TRANSVESICAL OU RETROPÚBICA)",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "QUADRICEPSPLASTIA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "REALINHAMENTO DO MECANISMO EXTENSOR DO JOELHO",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "RECONSTRUÇÃO DE TRÂNSITO INTESTINAL – COLOSTOMIA A HARTMANN",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "RECONSTRUÇÃO LIGAMENTAR INTRA-ARTICULAR DO JOELHO (CRUZADO ANTERIOR)",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "RECONSTRUÇÃO LIGAMENTAR INTRA-ARTICULAR DO JOELHO (CRUZADO POSTERIOR)",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "REFLUXO GASTROESOFÁGICO – TRATAMENTO CIRÚRGICO",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "REPARO DE ROTURA DO MANGUITO ROTADOR (ARTROSCOPIA)",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "RESSECÇÃO SIMPLES DE TUMOR ÓSSEO / DE PARTES MOLES",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "RESSECÇÃO TRANSURETRAL DE PRÓSTATA (RTUP)",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "RETIRADA DE PRÓTESE DE SUBSTITUIÇÃO DE GRANDES ARTICULAÇÕES",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "RETOSSIGMOIDECTOMIA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "SALPINGECTOMIA LAPAROSCÓPICA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "SINUSECTOMIA VIDEOLAPAROSCÓPICA – MAXILAR, ETMOIDE, FRONTAL E/OU ESFENOIDE",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DA SÍNDROME DO IMPACTO SUB-ACROMIAL",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE FRATURA / LESÃO FISÁRIA DA EXTREMIDADE PROXIMAL DO ÚMERO",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE FRATURA DO CALCÂNEO",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE FRATURA DO PLANALTO TIBIAL",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE FRATURA DO TÁLUS",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE FRATURA DO ÚMERO DISTAL",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE FRATURA / LESÃO FISÁRIA DISTAL DE TÍBIA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE FRATURA Viciosamente Consolidada dos Ossos Longos Exceto da Mão e do Pé",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE FRATURA DO PILÃO TIBIAL",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE GRANDES HÉRNIAS INCISIONAIS / COMPLEXAS",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE HÉRNIAS RECIDIVADAS",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE PSEUDARTROSE / RETARDO DE CONSOLIDAÇÃO / PERDA ÓSSEA DO ÚMERO",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE PSEUDARTROSE / RETARDO DE CONSOLIDAÇÃO / PERDA ÓSSEA DO ANTEBRAÇO",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE PSEUDARTROSE / RETARDO DE CONSOLIDAÇÃO / PERDA ÓSSEA DA DIÁFISE DO FÊMUR",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE PSEUDARTROSE / RETARDO DE CONSOLIDAÇÃO / PERDA ÓSSEA DA MÃO",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE PSEUDARTROSE / RETARDO DE CONSOLIDAÇÃO / PERDA ÓSSEA DO COLO DO FÊMUR",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE PSEUDARTROSE / RETARDO DE CONSOLIDAÇÃO / PERDA ÓSSEA DA DIÁFISE TIBIAL",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE PSEUDARTROSE AO NÍVEL DO JOELHO",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE PSEUDARTROSE AO NÍVEL DO COTOVELO",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE PSEUDARTROSE NA REGIÃO METÁFISE-EPIFISÁRIA DISTAL DO RÁDIO E ULNA",
+    "grupo": "Grupo IV"
+  },
+  {
+    "procedimento": "TRATAMENTO CIRÚRGICO DE ROTURA DE MENISCO COM SUTURA MENISCAL UNI / BICOMPARTIMENTAL",
+    "grupo": "Grupo IV"
   },
   {
     "procedimento": "TROMBECTOMIA",
