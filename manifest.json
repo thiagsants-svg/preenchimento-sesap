@@ -1,0 +1,20 @@
+{
+  "name": "SESAP Ninja",
+  "short_name": "SESAP Ninja",
+  "icons": [
+    {
+      "src": "ninja-icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "ninja-icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#07111a",
+  "theme_color": "#19c2d1"
+}
