@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Gerador SESAP — Autocomplete (ajuste Outro focus)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+  <style>
+    :root{
+      --bg:#f6f8fb; --card:#ffffff; --muted:#6b7280; --primary:#0b63d6; --accent:#06b6d4; --danger:#e11d48;
+      --radius:10px; --shadow: 0 8px 28px rgba(10,20,40,0.06);
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    html,body{height:100%; margin:0; background:linear-gradient(180deg,#f8fbff 0%,var(--bg) 100%); color:#07102a}
+    .wrap{max-width:1100px;margin:28px auto;padding:18px;}
+    header{display:flex;gap:12px;align-items:center;margin-bottom:18px}
+    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--primary),#6d28d9);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;box-shadow:var(--shadow)}
+    h1{margin:0;font-size:1.15rem}
+    p.lead{margin:4px 0 0;color:var(--muted);font-size:0.95rem}
+
+    .grid{display:grid;grid-template-columns:1fr 340px;gap:18px}
+    @media (max-width:980px){ .grid{grid-template-columns:1fr} }
+
+    .card{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+    label{display:block;font-weight:700;margin-bottom:6px;color:#07102a;font-size:0.88rem}
+    input[type="text"], input[type="date"], select{width:100%;padding:10px;border-radius:8px;border:1px solid #e6eef8;background:#fff;font-size:0.95rem;box-sizing:border-box}
+    .row{display:flex;gap:12px}
+    .row .col{flex:1}
+
+    /* procedimentos */
+    #procedimentos{display:flex;flex-direction:column;gap:10px;max-height:420px;overflow:auto;padding-right:6px;margin-top:10px}
+    .linha-proc{display:grid;grid-template-columns:1fr 180px 40px;gap:10px;align-items:center;padding:10px;border-radius:8px;background:linear-gradient(180deg,#fff,#fbfeff);border:1px solid #eef6ff}
+    .linha-proc.dragging{opacity:0.6;transform:scale(0.998);box-shadow:0 12px 30px rgba(5,10,30,0.06)}
+    .linha-proc input, .linha-proc select{padding:8px;border-radius:6px;border:1px solid #e7f0fb;background:white}
+    .proc-actions{display:flex;flex-direction:column;gap:6px;align-items:center}
+    .btn{padding:10px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
+    .btn.primary{background:linear-gradient(90deg,var(--primary),#5b21b6);color:white}
+    .btn.ghost{background:transparent;border:1px solid #dbeafe;color:var(--primary)}
+    .small{padding:8px 10px;border-radius:8px;border:0;background:#f3f7ff;color:var(--primary);font-weight:700}
+    .muted{color:var(--muted);font-size:0.9rem}
+
+    /* suggestions box */
+    .typeahead-box{ position:absolute; z-index:1200; background:white; border-radius:8px; box-shadow:0 8px 20px rgba(6,12,34,0.08); border:1px solid #e6eef8; max-height:260px; overflow:auto; width:100%; }
+    .typeahead-item{padding:8px 10px; cursor:pointer}
+    .typeahead-item.highlight{background:#eef6ff}
+    .typeahead-sub{font-size:0.86rem;color:#475569;margin-top:4px}
+
+    .shortcuts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+    .shortcut{background:#eef7ff;border:1px solid #dbeafe;padding:8px 10px;border-radius:8px;cursor:pointer;font-weight:700;color:var(--primary)}
+    footer{margin-top:18px;text-align:center;color:var(--muted);font-size:0.9rem}
+
+    /* auxiliar-other styling: make it obvious and roomy */
+    .aux-other { display:none; margin-top:6px; }
+    .aux-other input { width:100%; padding:10px; border-radius:8px; border:1px solid #e6eef8; background:#fff; font-size:0.95rem; }
+
+    @media (max-width:640px){ .linha-proc{grid-template-columns:1fr 140px 40px} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">FG</div>
+      <div>
+        <h1>Gerador de Faturamento — Autocomplete</h1>
+        <p class="lead">Autocomplete inteligente — agora “Outro” foca e seleciona automaticamente.</p>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- MAIN -->
+      <div>
+        <div class="card">
+          <div style="display:flex;gap:12px;flex-direction:column">
+            <div class="row">
+              <div class="col">
+                <label>Hospital</label>
+                <input id="hospital" type="text" value="HOSPITAL RIO GRANDE">
+              </div>
+              <div style="width:180px">
+                <label>Data</label>
+                <input id="data" type="date">
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:8px">
+              <div class="col">
+                <label>Cirurgião</label>
+                <div style="display:flex;gap:8px">
+                  <select id="cirurgiao_select">
+                    <option value="José Augusto">José Augusto</option>
+                    <option value="Harue Kumakura">Harue Kumakura</option>
+                    <option value="José Linhares">José Linhares</option>
+                    <option value="Yuri Lourenço">Yuri Lourenço</option>
+                    <option value="__outro__">Outro...</option>
+                  </select>
+                  <input id="cirurgiao_outro" type="text" placeholder="Outro cirurgião" style="display:none;flex:1">
+                </div>
+              </div>
+
+              <div class="col">
+                <label>Auxiliar</label>
+                <div style="display:flex;gap:8px">
+                  <select id="aux_select">
+                    <option value="">-- selecionar --</option>
+                    <option value="Harue Kumakura">Harue Kumakura</option>
+                    <option value="José Linhares">José Linhares</option>
+                    <option value="Yuri Lourenço">Yuri Lourenço</option>
+                    <option value="__outro__">Outro...</option>
+                  </select>
+                </div>
+                <div class="aux-other" id="aux-other">
+                  <input id="aux_outro" placeholder="Digite o nome do auxiliar (visual amplo)" />
+                </div>
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:8px">
+              <div class="col">
+                <label>Anestesista</label>
+                <div style="display:flex;gap:8px">
+                  <select id="anest_select">
+                    <option value="Thiago José">Thiago José</option>
+                    <option value="Bruno Sinedino">Bruno Sinedino</option>
+                    <option value="__outro__">Outro...</option>
+                  </select>
+                  <input id="anest_outro" type="text" placeholder="Outro anestesista" style="display:none;flex:1">
+                </div>
+              </div>
+              <div class="col">
+                <label>Empresa do cirurgião</label>
+                <input id="emp_cir" type="text" value="Targino & Rocha">
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:8px">
+              <div class="col">
+                <label>Empresa do anestesista</label>
+                <input id="emp_anest" type="text" value="COOPANEST RN">
+              </div>
+              <div class="col">
+                <label>Paciente</label>
+                <input id="paciente" type="text" placeholder="Nome completo do paciente">
+              </div>
+            </div>
+
+            <hr style="margin:12px 0;border:none;border-top:1px solid #eef6ff" />
+
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <strong>Procedimentos</strong>
+                <div class="muted" style="margin-top:6px;font-size:0.9rem">Atalhos rápidos abaixo — arraste para reordenar</div>
+              </div>
+              <div style="display:flex;gap:8px">
+                <button type="button" class="small" onclick="duplicarUltima()">Duplicar</button>
+                <button type="button" class="small" onclick="addProc()">Adicionar</button>
+                <button type="button" class="small" style="background:#fff5f5;color:var(--danger);" onclick="limparProcedimentos()">Limpar</button>
+              </div>
+            </div>
+
+            <div class="shortcuts" style="margin-top:10px" id="shortcuts"></div>
+            <datalist id="groups-datalist"></datalist>
+            <div id="procedimentos"></div>
+
+            <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+              <button class="btn primary" onclick="gerarPdf({preview:true})">Pré-visualizar PDF</button>
+              <button class="btn ghost" onclick="gerarPdf({preview:false})">Gerar e baixar</button>
+              <button class="btn" style="background:#e6f9f6;color:var(--accent)" onclick="salvarManualmente()">Salvar</button>
+              <button class="btn danger" onclick="limparTudo()">Resetar tudo</button>
+            </div>
+
+            <div class="muted" style="margin-top:10px">Dados salvos localmente (localStorage). JSON: <code>procedimentos_grupos_I_a_V_FINAL.json</code>.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIDE -->
+      <div>
+        <div class="card" style="position:sticky;top:20px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div><strong>Resumo</strong><div class="muted" style="font-size:0.9rem">Confira antes de gerar</div></div>
+            <div style="text-align:right"><span id="count-proc">0</span> itens</div>
+          </div>
+
+          <div style="margin-top:12px">
+            <div style="padding:10px;border-radius:8px;background:linear-gradient(180deg,#fff,#fbfdff);border:1px solid #eef6ff">
+              <div style="font-weight:700">Equipe</div>
+              <div class="muted" id="preview-equipe">—</div>
+            </div>
+            <div style="height:10px"></div>
+            <div style="padding:10px;border-radius:8px;background:linear-gradient(180deg,#fff,#fbfdff);border:1px solid #eef6eff">
+              <div style="font-weight:700">Hospital / Data</div>
+              <div class="muted" id="preview-hospital">—</div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px;display:flex;gap:8px">
+            <button class="small" onclick="salvarManualmente()">Salvar</button>
+            <button class="small" onclick="location.reload()">Recarregar</button>
+          </div>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div class="card">
+          <div style="font-weight:700;margin-bottom:6px">Ajuda rápida</div>
+          <div class="muted">• Use atalhos para inserir rapidamente.<br>• Reordene arrastando.<br>• Cada 5 procedimentos geram 2 páginas (Cirurgia + Anestesia).</div>
+        </div>
+      </div>
+    </div>
+
+    <footer>Gerador SESAP — Autocomplete • Mantenha <code>sesap.pdf</code> e o JSON na mesma pasta.</footer>
+  </div>
+
+<script>
+/* Ajuste: ao selecionar "Outro" nos selects, o campo aparece e recebe focus() + select() */
+const JSON_FILE = "procedimentos_grupos_I_a_V_FINAL.json";
+const SHORTCUTS = [
+  ["Trombectomia", "TROMBECTOMIA", "Grupo IV"],
+  ["Arteriorrafia", "ARTERIORRAFIA", "Grupo V"],
+  ["Acesso central", "PUNÇÃO PERCUTÂNEA DE ÓRGÃOS, CAV OU ESP ANATÔMICOS (ACESSO CENTRAL)", "Grupo I"],
+  ["Desbridamento", "DEBRIDAMENTO CIRÚRGICO (POR UNIDADE TOPOGRÁFICA)", "Grupo II"],
+  ["Instalação PAM", "INSTALAÇÃO / IMPLANTE DE PAM INVASIVA", "Grupo III"]
+];
+const STORAGE_KEY = "sesap_autocomplete_v2";
+let procedimentosDB = [];
+
+function q(id){ return document.getElementById(id); }
+function escapeHtml(s){ if (!s) return ""; return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;'); }
+function debounce(fn,wait=220){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), wait); }; }
+
+async function carregarDB(){
+  try{
+    const res = await fetch(JSON_FILE);
+    if (!res.ok) throw new Error("JSON não encontrado: " + res.status);
+    procedimentosDB = await res.json();
+    procedimentosDB.forEach(p => p._uc = (p.procedimento||"").toUpperCase());
+    const groups = Array.from(new Set(procedimentosDB.map(p => (p.grupo||"").trim()).filter(Boolean))).sort();
+    const dl = q("groups-datalist");
+    dl.innerHTML = "";
+    groups.forEach(g=>{ const opt = document.createElement("option"); opt.value = g; dl.appendChild(opt); });
+    renderShortcuts();
+  }catch(e){ console.error(e); alert("Erro carregando JSON de procedimentos: " + e.message); }
+}
+
+function buscarSugestoes(qstr, max=8){
+  if (!qstr || !procedimentosDB.length) return [];
+  const t = qstr.trim().toUpperCase();
+  const results = procedimentosDB.map(item => {
+    let score = 0;
+    if (item._uc.startsWith(t)) score += 100;
+    if (item._uc.includes(t)) score += 10;
+    score += Math.max(0, 20 - Math.floor(item._uc.length / 20));
+    return { score, item };
+  }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,max).map(x=>x.item);
+  return results;
+}
+
+function attachTypeahead(inputElem, groupInput){
+  const box = document.createElement("div");
+  box.className = "typeahead-box";
+  box.style.display = "none";
+  document.body.appendChild(box);
+  let items = []; let highlightIndex = -1;
+  function posicionar(){ const r = inputElem.getBoundingClientRect(); box.style.left = `${r.left + window.scrollX}px`; box.style.top = `${r.bottom + window.scrollY + 6}px`; box.style.width = `${r.width}px`; }
+  function render(sugs){ items = sugs; highlightIndex = -1; box.innerHTML = ""; if (!sugs.length){ box.style.display = "none"; return; } sugs.forEach((s,i)=>{ const el = document.createElement("div"); el.className = "typeahead-item"; el.innerHTML = `<div><strong>${escapeHtml(s.procedimento)}</strong></div><div class="typeahead-sub">${escapeHtml(s.grupo)}</div>`; el.addEventListener("mousedown", ev => { ev.preventDefault(); select(i); }); box.appendChild(el); }); posicionar(); box.style.display = "block"; }
+  function highlight(idx){ const children = Array.from(box.children); children.forEach((c,i)=> c.classList.toggle("highlight", i===idx)); highlightIndex = idx; }
+  function select(idx){ if (idx < 0 || idx >= items.length) return; const sel = items[idx]; inputElem.value = sel.procedimento; if (groupInput) groupInput.value = sel.grupo || ""; box.style.display = "none"; inputElem.focus(); salvarNoLocalStorage(); }
+  const doSearch = debounce(()=>{ const qv = inputElem.value.trim(); if (!qv){ box.style.display = "none"; return; } const sugs = buscarSugestoes(qv, 8); render(sugs); }, 160);
+  inputElem.addEventListener("input", ()=> doSearch());
+  inputElem.addEventListener("keydown", (ev)=>{ if (box.style.display === "none") return; if (ev.key === "ArrowDown"){ ev.preventDefault(); highlight(Math.min(highlightIndex+1, items.length-1)); return; } if (ev.key === "ArrowUp"){ ev.preventDefault(); highlight(Math.max(highlightIndex-1, 0)); return; } if (ev.key === "Enter"){ ev.preventDefault(); if (highlightIndex >= 0) select(highlightIndex); } if (ev.key === "Escape"){ box.style.display = "none"; } });
+  window.addEventListener("resize", posicionar);
+  inputElem.addEventListener("blur", ()=> setTimeout(()=> box.style.display='none', 150));
+}
+
+function makeProcedureRow(procText = "", grupoText = ""){
+  const cont = q("procedimentos");
+  const wrapper = document.createElement("div");
+  wrapper.className = "linha-proc"; wrapper.draggable = true;
+  wrapper.innerHTML = `
+    <input name="procedimento" placeholder="Descrição do procedimento" value="${escapeHtml(procText)}">
+    <input name="grupo" list="groups-datalist" placeholder="Grupo (escolha ou edite)" value="${escapeHtml(grupoText)}">
+    <div class="proc-actions">
+      <button class="small" type="button" title="Remover" onclick="(function(el){ el.parentNode.removeChild(el); salvarNoLocalStorage(); })(this.closest('.linha-proc'));">✕</button>
+    </div>
+  `;
+  cont.appendChild(wrapper);
+  const inp = wrapper.querySelector('input[name="procedimento"]');
+  const grp = wrapper.querySelector('input[name="grupo"]');
+  attachTypeahead(inp, grp);
+  inp.addEventListener('blur', () => {
+    const v = inp.value.trim().toUpperCase();
+    if (!v) { salvarNoLocalStorage(); return; }
+    const found = procedimentosDB.find(p => p._uc === v);
+    if (found && found.grupo) grp.value = found.grupo;
+    salvarNoLocalStorage();
+  });
+  grp.addEventListener('input', () => { salvarNoLocalStorage(); });
+  inp.addEventListener('input', () => { salvarNoLocalStorage(); updateSidePreview(); });
+  wrapper.addEventListener("dragstart",(e)=>{ wrapper.classList.add("dragging"); e.dataTransfer.setData("text/plain","drag"); window._dragSrc = wrapper; });
+  wrapper.addEventListener("dragend",()=>{ wrapper.classList.remove("dragging"); window._dragSrc = null; salvarNoLocalStorage(); });
+  wrapper.addEventListener("dragover",(e)=>{ e.preventDefault(); const src=window._dragSrc; if(!src||src===wrapper) return; const parent=wrapper.parentNode; const rect=wrapper.getBoundingClientRect(); const mid=rect.top+rect.height/2; if (e.clientY<mid) parent.insertBefore(src, wrapper); else parent.insertBefore(src, wrapper.nextSibling); });
+  return wrapper;
+}
+
+function addProc(desc="", group=""){ makeProcedureRow(desc, group); salvarNoLocalStorage(); updateSidePreview(); }
+function duplicarUltima(){ const nodes = document.querySelectorAll("#procedimentos .linha-proc"); if (!nodes.length) { addProc(); return; } const last = nodes[nodes.length - 1]; const desc = last.querySelector('input[name="procedimento"]').value; const grupo = last.querySelector('input[name="grupo"]').value; addProc(desc, grupo); }
+function limparProcedimentos(){ if (!confirm("Remover todos os procedimentos?")) return; localStorage.removeItem(`${STORAGE_KEY}_procedimentos`); renderProcedimentosUI(); salvarNoLocalStorage(); }
+function renderProcedimentosUI(){ const cont = q("procedimentos"); cont.innerHTML = ""; const list = getProcedimentosFromStorage(); if (list.length === 0) { const main = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); if (Array.isArray(main.procedimentos) && main.procedimentos.length) { main.procedimentos.forEach(p=>makeProcedureRow(p.descricao,p.grupo)); return; } addProc(); return; } list.forEach(p => makeProcedureRow(p.descricao, p.grupo)); }
+
+function getProcedimentosFromStorage(){ try{ const raw = localStorage.getItem(`${STORAGE_KEY}_procedimentos`); if (!raw) return []; return JSON.parse(raw); } catch(e){ return []; } }
+function getProcedimentosFromUI(){ const nodes = document.querySelectorAll("#procedimentos .linha-proc"); const out = []; nodes.forEach(n=>{ const desc = n.querySelector('input[name="procedimento"]').value.trim(); const grp = n.querySelector('input[name="grupo"]').value.trim(); if (desc || grp) out.push({descricao: desc, grupo: grp}); }); q("count-proc").innerText = out.length; return out; }
+function salvarNoLocalStorage(){ try{ const state = { hospital: q("hospital").value, data: q("data").value, cirurgiao: getCirurgiaoValueForSave(), auxiliar: getAuxiliarValueForSave(), anest: getAnestValueForSave(), emp_cir: q("emp_cir").value, emp_anest: q("emp_anest").value, paciente: q("paciente").value, procedimentos: getProcedimentosFromUI() }; localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); localStorage.setItem(`${STORAGE_KEY}_procedimentos`, JSON.stringify(state.procedimentos)); updateSidePreview(); }catch(e){ console.warn(e); } }
+function carregarDoLocalStorage(){ try{ const raw = localStorage.getItem(STORAGE_KEY); if (!raw) return; const s = JSON.parse(raw); if (s.hospital) q("hospital").value = s.hospital; if (s.data) q("data").value = s.data; if (s.emp_cir) q("emp_cir").value = s.emp_cir; if (s.emp_anest) q("emp_anest").value = s.emp_anest; if (s.paciente) q("paciente").value = s.paciente; if (s.cirurgiao !== undefined){ const opts = ["José Augusto","Harue Kumakura","José Linhares","Yuri Lourenço"]; if (opts.includes(s.cirurgiao)){ q("cirurgiao_select").value = s.cirurgiao; q("cirurgiao_outro").style.display = "none"; } else if (s.cirurgiao === ""){ q("cirurgiao_select").value = "José Augusto"; q("cirurgiao_outro").style.display = "none"; } else { q("cirurgiao_select").value="__outro__"; q("cirurgiao_outro").style.display="block"; q("cirurgiao_outro").value = s.cirurgiao; } } if (s.auxiliar !== undefined){ const opts = ["Harue Kumakura","José Linhares","Yuri Lourenço"]; if (opts.includes(s.auxiliar)){ q("aux_select").value = s.auxiliar; q("aux-other").style.display="none"; q("aux_outro").value = ""; } else if (s.auxiliar === ""){ q("aux_select").value = ""; q("aux-other").style.display="none"; q("aux_outro").value = ""; } else { q("aux_select").value="__outro__"; q("aux-other").style.display="block"; q("aux_outro").value = s.auxiliar; } } if (s.anest !== undefined){ const opts = ["Thiago José","Bruno Sinedino"]; if (opts.includes(s.anest)){ q("anest_select").value = s.anest; q("anest_outro").style.display="none"; } else if (s.anest === ""){ q("anest_select").value = "Thiago José"; q("anest_outro").style.display="none"; } else { q("anest_select").value="__outro__"; q("anest_outro").style.display="block"; q("anest_outro").value = s.anest; } } if (Array.isArray(s.procedimentos)) localStorage.setItem(`${STORAGE_KEY}_procedimentos`, JSON.stringify(s.procedimentos)); }catch(e){ console.warn("load err", e); } }
+function salvarManualmente(){ salvarNoLocalStorage(); alert("Salvo localmente."); }
+function limparTudo(){ if (!confirm("Resetar tudo para os padrões?")) return; localStorage.removeItem(STORAGE_KEY); localStorage.removeItem(`${STORAGE_KEY}_procedimentos`); q("hospital").value = "HOSPITAL RIO GRANDE"; const hoje = new Date(); q("data").value = `${hoje.getFullYear()}-${String(hoje.getMonth()+1).padStart(2,"0")}-${String(hoje.getDate()).padStart(2,"0")}`; q("cirurgiao_select").value = "José Augusto"; q("cirurgiao_outro").value=""; q("cirurgiao_outro").style.display="none"; q("aux_select").value=""; q("aux_outro").value=""; q("aux-other").style.display="none"; q("anest_select").value="Thiago José"; q("anest_outro").value=""; q("anest_outro").style.display="none"; q("emp_cir").value = "Targino & Rocha"; q("emp_anest").value="COOPANEST RN"; q("paciente").value=""; localStorage.removeItem(`${STORAGE_KEY}_procedimentos`); renderProcedimentosUI(); salvarNoLocalStorage(); }
+
+function hookDropdowns(){
+  const cs = q("cirurgiao_select"), co = q("cirurgiao_outro");
+  cs.addEventListener("change", ()=>{
+    if(cs.value==="__outro__"){ co.style.display="block"; co.focus(); co.select(); } else co.style.display="none";
+    salvarNoLocalStorage();
+  });
+  co.addEventListener("input", salvarNoLocalStorage);
+
+  const asel = q("aux_select"), aoutWrapper = q("aux-other"), aout = q("aux_outro");
+  asel.addEventListener("change", ()=>{
+    if (asel.value === "__outro__") {
+      aoutWrapper.style.display = "block";
+      aout.focus(); aout.select();
+    } else {
+      aoutWrapper.style.display = "none";
+      aout.value = "";
+    }
+    salvarNoLocalStorage();
+  });
+  aout.addEventListener("input", salvarNoLocalStorage);
+
+  const an = q("anest_select"), anout = q("anest_outro");
+  an.addEventListener("change", ()=>{
+    if(an.value==="__outro__"){ anout.style.display="block"; anout.focus(); anout.select(); } else anout.style.display="none";
+    salvarNoLocalStorage();
+  });
+  anout.addEventListener("input", salvarNoLocalStorage);
+}
+
+function getCirurgiaoValueForSave(){ const sel=q("cirurgiao_select").value; if(sel==="__outro__") return q("cirurgiao_outro").value.trim(); return sel; }
+function getAuxiliarValueForSave(){ const sel=q("aux_select").value; if(sel==="__outro__") return q("aux_outro").value.trim(); return sel; }
+function getAnestValueForSave(){ const sel=q("anest_select").value; if(sel==="__outro__") return q("anest_outro").value.trim(); return sel; }
+
+function updateSidePreview(){ const cir = getCirurgiaoValueForSave() || "—"; const aux = getAuxiliarValueForSave() || "—"; const anest = getAnestValueForSave() || "—"; q("preview-equipe").innerText = `Cirurgião: ${cir} • Auxiliar: ${aux} • Anest.: ${anest}`; q("preview-hospital").innerText = `${q("hospital").value || "—"} • ${q("data").value || "—"}`; q("count-proc").innerText = getProcedimentosFromUI().length; }
+
+function renderShortcuts(){ const box = q("shortcuts"); box.innerHTML = ""; SHORTCUTS.forEach(([label, procText, fallbackGroup])=>{ const btn = document.createElement("button"); btn.className = "shortcut"; btn.type = "button"; btn.innerText = label; btn.addEventListener("click", ()=>{ const found = procedimentosDB.find(p => p.procedimento.toUpperCase() === (procText || "").toUpperCase()); if (found) addProc(found.procedimento, found.grupo || fallbackGroup); else addProc(procText || label, fallbackGroup || ""); }); box.appendChild(btn); }); }
+
+function attachAutoSaveHandlers(){ const inputs = Array.from(document.querySelectorAll("input, select")); inputs.forEach(inp => inp.addEventListener("input", () => { if (window._saveTimer) clearTimeout(window._saveTimer); window._saveTimer = setTimeout(()=>{ const procs = getProcedimentosFromUI(); localStorage.setItem(`${STORAGE_KEY}_procedimentos`, JSON.stringify(procs)); salvarNoLocalStorage(); }, 300); })); }
+
+document.addEventListener("DOMContentLoaded", async ()=>{ await carregarDB(); carregarDoLocalStorage(); if (getProcedimentosFromStorage().length === 0) addProc(); attachAutoSaveHandlers(); renderProcedimentosUI(); hookDropdowns(); renderShortcuts(); updateSidePreview(); });
+
+function computeFontSizeForField(fieldType, text) { const len = (text||"").length; if (fieldType==="procedimento"){ if (len<=30) return 9; if (len<=60) return 8; if (len<=100) return 7; return 6.5;} if (fieldType==="paciente"){ if (len<=30) return 9; if (len<=60) return 8; return 7.5; } if (fieldType==="grupo"){ if (len<=16) return 9; if (len<=30) return 8; return 7.5; } if (len<=28) return 10; if (len<=50) return 9; return 8; }
+
+async function gerarPdf({ preview = false } = {}) {
+  const { PDFDocument } = PDFLib;
+  const hospitalVal = q("hospital").value;
+  const dataInput = q("data").value;
+  const cirurgiaoVal = getCirurgiaoValueForSave();
+  const auxiliarVal = getAuxiliarValueForSave();
+  const anestVal = getAnestValueForSave();
+  const empCirVal = q("emp_cir").value;
+  const empAnestVal = q("emp_anest").value;
+  const pacienteVal = q("paciente").value;
+  if (!pacienteVal) { alert("Informe o nome do paciente."); return; }
+  let dataStr = "";
+  if (dataInput) { const [yyyy,mm,dd] = dataInput.split("-"); dataStr = `${dd}/${mm}/${yyyy}`; }
+  const equipeTexto = `Cirurgião: ${cirurgiaoVal} / Auxiliar: ${auxiliarVal} / Anest.: ${anestVal}`;
+  const procedimentos = getProcedimentosFromUI();
+  if (!procedimentos.length) { alert("Informe pelo menos 1 procedimento."); return; }
+  salvarNoLocalStorage();
+  let templateBytes;
+  try { templateBytes = await fetch("sesap.pdf").then(r => { if (!r.ok) throw new Error("sesap.pdf não encontrado (verifique caminho)"); return r.arrayBuffer(); }); }
+  catch(e) { alert("Erro carregando sesap.pdf: " + e.message); return; }
+  const docFinal = await PDFDocument.create();
+  function em_blocos(lista, tam=5){ const out=[]; for (let i=0;i<lista.length;i+=tam) out.push(lista.slice(i,i+tam)); return out; }
+  async function adicionarPagina(tipo, bloco){
+    const tempDoc = await PDFDocument.load(templateBytes);
+    const form = tempDoc.getForm();
+    const fHospital = form.getTextField("HOSPITAL");
+    const fEmpresa = form.getTextField("EMPRESA");
+    const fData = form.getTextField("DATA");
+    const fEquipe = form.getTextField("EQUIPE");
+    fHospital.setText(hospitalVal||""); fHospital.setFontSize(11);
+    fEmpresa.setText(tipo==="cirurgia" ? (empCirVal||"") : (empAnestVal||"")); fEmpresa.setFontSize(11);
+    fData.setText(dataStr||""); fData.setFontSize(10);
+    fEquipe.setText(equipeTexto||""); fEquipe.setFontSize(9);
+    for (let i=0;i<5;i++){
+      const idx = i+1; const suf = String(idx).padStart(2,"0"); const linha = bloco[i];
+      const campoProc = form.getTextField(`PROCEDIMENTO_${suf}`);
+      const campoPac = form.getTextField(`PACIENTE${suf}`);
+      const campoGrupo = form.getTextField(`GRUPOP${idx}`);
+      const campoMedPrinc = form.getTextField(`MEDICO_PRINC_${suf}`);
+      const campoMedAux = form.getTextField(`MEDICO_AUX_${suf}`);
+      try{ campoProc.enableMultiline(); }catch(e){}
+      if (linha && linha.descricao){
+        const procText = linha.descricao;
+        const pacientText = pacienteVal;
+        const grupoText = linha.grupo || "";
+        campoProc.setFontSize(computeFontSizeForField("procedimento", procText));
+        campoPac.setFontSize(computeFontSizeForField("paciente", pacientText));
+        campoGrupo.setFontSize(computeFontSizeForField("grupo", grupoText));
+        campoProc.setText(procText);
+        campoPac.setText(pacientText);
+        campoGrupo.setText(grupoText);
+        if (tipo==="cirurgia"){
+          campoMedPrinc.setFontSize(computeFontSizeForField("medico", cirurgiaoVal));
+          campoMedAux.setFontSize(computeFontSizeForField("medico", auxiliarVal));
+          campoMedPrinc.setText(cirurgiaoVal||""); campoMedAux.setText(auxiliarVal||"");
+        } else {
+          campoMedPrinc.setFontSize(computeFontSizeForField("medico", anestVal));
+          campoMedAux.setFontSize(computeFontSizeForField("medico", ""));
+          campoMedPrinc.setText(anestVal||""); campoMedAux.setText("");
+        }
+      } else {
+        campoProc.setText(""); campoPac.setText(""); campoGrupo.setText(""); campoMedPrinc.setText(""); campoMedAux.setText("");
+      }
+    }
+    try{ form.flatten(); }catch(e){}
+    const [page] = await docFinal.copyPages(tempDoc, [0]);
+    docFinal.addPage(page);
+  }
+  const blocos = em_blocos(procedimentos, 5);
+  for (const bloco of blocos){ await adicionarPagina("cirurgia", bloco); await adicionarPagina("anestesia", bloco); }
+  const pdfBytes = await docFinal.save();
+  const blob = new Blob([pdfBytes], { type: "application/pdf" });
+  const url = URL.createObjectURL(blob);
+  if (preview) { window.open(url, "_blank"); setTimeout(()=>URL.revokeObjectURL(url),30000); }
+  else { const a = document.createElement("a"); a.href = url; a.download = "faturamento_sesap.pdf"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),2000); }
+}
+</script>
+</body>
+</html>
