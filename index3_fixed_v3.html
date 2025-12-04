@@ -1,0 +1,766 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>SESAP Ninja — Assassine a burocracia</title>
+
+<!-- pdf-lib para manipular PDF forms no browser -->
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+<!-- PWA / icons (coloque as imagens na mesma pasta) -->
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" sizes="180x180" href="ninja-icon-180.png">
+<link rel="icon" type="image/png" sizes="32x32" href="ninja-icon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="ninja-icon-16.png">
+<link rel="shortcut icon" href="favicon.ico">
+<meta name="theme-color" content="#0fb0a8">
+
+<style>
+  :root{
+    --bg:#050814;
+    --card:#061025;
+    --muted:#9fb3c2;
+    --text:#eaf6f7;
+    --accent:#0fb0a8;
+    --accent-2:#7a5ef1;
+    --danger:#ff6b6b;
+    --radius:12px;
+    --shadow: 0 12px 36px rgba(2,6,12,0.6);
+  }
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,#02040a 0%,var(--bg) 70%); color:var(--text);font-family:Inter,system-ui,Arial,-apple-system;-webkit-font-smoothing:antialiased;}
+  a{color:var(--accent)}
+  .wrap{max-width:1150px;margin:20px auto;padding:18px;}
+  header{display:flex;gap:12px;align-items:center;margin-bottom:18px}
+  .badge{width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,var(--accent-2),var(--accent));display:flex;align-items:center;justify-content:center;color:white;font-weight:800;box-shadow:var(--shadow)}
+  .badge img{width:46px;height:46px;object-fit:contain;border-radius:10px}
+  h1{margin:0;font-size:1.12rem}
+  p.lead{margin:4px 0 0;color:var(--muted);font-size:0.92rem}
+  .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
+  @media (max-width:980px){ .grid{grid-template-columns:1fr} }
+  .card{background:var(--card);border-radius:12px;padding:16px;box-shadow:var(--shadow)}
+  label{display:block;font-weight:700;margin-bottom:6px;color:var(--text);font-size:0.88rem}
+  input[type="text"], input[type="date"], select{
+    width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:var(--text);font-size:0.95rem;box-sizing:border-box;
+  }
+  input::placeholder{color:rgba(234,246,247,0.16)}
+  select{ -webkit-appearance:none; -moz-appearance:none; appearance:none; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); color:var(--text); padding-right:28px; }
+  select::-ms-expand{ display:none; } option{ background:var(--card); color:var(--text); }
+  .select-wrap{position:relative} .select-wrap:after{ content:'▾'; position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--muted); pointer-events:none; }
+  .row{display:flex;gap:12px} .row .col{flex:1}
+
+  #procedimentos-wrap{margin-top:10px}
+  #procedimentos{display:flex;flex-direction:column;gap:10px;max-height:420px;overflow:auto;padding-right:6px;min-height:80px;border-radius:10px}
+  .linha-proc{display:grid;grid-template-columns:1fr 200px 44px;gap:10px;align-items:center;padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03)}
+  .linha-proc.dragging{opacity:0.85;transform:scale(0.998);box-shadow:0 20px 40px rgba(0,0,0,0.6)}
+  .linha-proc input, .linha-proc select{padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:var(--text)}
+  .proc-actions{display:flex;flex-direction:column;gap:6px;align-items:center}
+  .btn{padding:10px 14px;border-radius:12px;border:0;cursor:pointer;font-weight:700}
+  .btn.primary{background:linear-gradient(90deg,var(--accent-2),var(--accent));color:#021018}
+  .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--text)}
+  .small{padding:8px 10px;border-radius:10px;border:0;background:transparent;color:var(--accent);font-weight:700}
+  .muted{color:var(--muted);font-size:0.9rem}
+
+  .typeahead-box{ position:absolute; z-index:1400; background:linear-gradient(180deg,#071726,#062135); border-radius:8px; box-shadow:0 8px 28px rgba(2,6,23,0.8); border:1px solid rgba(255,255,255,0.02); max-height:260px; overflow:auto; width:100%;}
+  .typeahead-item{padding:10px 12px; cursor:pointer; border-bottom:1px solid rgba(255,255,255,0.02); color:var(--text)}
+  .typeahead-item.highlight{background:linear-gradient(90deg, rgba(122,94,241,0.12), rgba(15,176,168,0.06))}
+  .typeahead-sub{font-size:0.86rem;color:var(--muted);margin-top:6px}
+
+  .shortcuts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+  .shortcut{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px 12px;border-radius:999px;cursor:pointer;font-weight:700;color:var(--accent)}
+  .shortcut:hover{background:rgba(255,255,255,0.02)}
+
+  .aux-other { display:none; margin-top:6px; }
+  .aux-other input, #cirurgiao_outro, #anest_outro {
+    width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.06);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); color:var(--text); font-size:0.95rem;
+    box-shadow: 0 8px 22px rgba(2,6,10,0.5);
+    transition: box-shadow .12s ease, border-color .12s ease, transform .06s ease;
+  }
+  .aux-other input:focus, #cirurgiao_outro:focus, #anest_outro:focus{
+    outline: none; border-color: var(--accent); box-shadow: 0 10px 30px rgba(15,176,168,0.09); transform: translateY(-1px);
+  }
+  .aux-label{ font-size:0.78rem; color:var(--muted); margin-bottom:6px; display:block; }
+
+  .procedimentos-placeholder {
+    border-radius:10px;padding:18px;text-align:center;color:var(--muted);
+    background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));border:1px dashed rgba(255,255,255,0.03);
+  }
+  .placeholder-title{font-weight:700;color:var(--text);margin-bottom:10px}
+  .quick-add{display:inline-block;margin-top:8px;padding:8px 12px;border-radius:999px;background:linear-gradient(90deg,var(--accent-2),var(--accent));color:#021018;font-weight:800;cursor:pointer}
+  footer{margin-top:18px;text-align:center;color:var(--muted);font-size:0.9rem}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="badge" title="SESAP Ninja">
+        <img src="ninja.png" alt="SESAP Ninja">
+      </div>
+      <div style="flex:1">
+        <h1>SESAP Ninja — <span style="color:var(--accent);">Assassine a burocracia</span></h1>
+        <p class="lead">Preencha rápido com autocomplete e atalhos ninja.</p>
+      </div>
+    </header>
+
+    <div class="grid">
+      <div>
+        <div class="card">
+          <div style="display:flex;gap:12px;flex-direction:column">
+            <div class="row">
+              <div class="col">
+                <label>Hospital</label>
+                <input id="hospital" type="text" value="HOSPITAL RIO GRANDE">
+              </div>
+              <div style="width:190px">
+                <label>Data</label>
+                <input id="data" type="date">
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:8px">
+              <div class="col">
+                <label>Cirurgião</label>
+                <div class="select-wrap">
+                  <select id="cirurgiao_select" class="custom-arrow">
+                    <option value="José Augusto">José Augusto</option>
+                    <option value="Harue Kumakura">Harue Kumakura</option>
+                    <option value="José Linhares">José Linhares</option>
+                    <option value="Yuri Lourenço">Yuri Lourenço</option>
+                    <option value="__outro__">Outro...</option>
+                  </select>
+                </div>
+                <div class="aux-other" id="cirurgiao-other" style="margin-top:8px">
+                  <span class="aux-label">Outro cirurgião</span>
+                  <input id="cirurgiao_outro" placeholder="Digite o nome do cirurgião">
+                </div>
+              </div>
+
+              <div class="col">
+                <label>Auxiliar</label>
+                <div class="select-wrap">
+                  <select id="aux_select" class="custom-arrow">
+                    <option value="">-- selecionar --</option>
+                    <option value="Harue Kumakura">Harue Kumakura</option>
+                    <option value="José Linhares">José Linhares</option>
+                    <option value="Yuri Lourenço">Yuri Lourenço</option>
+                    <option value="__outro__">Outro...</option>
+                  </select>
+                </div>
+                <div class="aux-other" id="aux-other" style="margin-top:8px">
+                  <span class="aux-label">Outro auxiliar</span>
+                  <input id="aux_outro" placeholder="Digite o nome do auxiliar (visual amplo)">
+                </div>
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:8px">
+              <div class="col">
+                <label>Anestesista</label>
+                <div class="select-wrap">
+                  <select id="anest_select" class="custom-arrow">
+                    <option value="Thiago José">Thiago José</option>
+                    <option value="Bruno Sinedino">Bruno Sinedino</option>
+                    <option value="__outro__">Outro...</option>
+                  </select>
+                </div>
+                <div class="aux-other" id="anest-other" style="margin-top:8px">
+                  <span class="aux-label">Outro anestesista</span>
+                  <input id="anest_outro" placeholder="Digite o nome do anestesista">
+                </div>
+              </div>
+
+              <div class="col">
+                <label>Empresa do cirurgião</label>
+                <input id="emp_cir" type="text" value="Targino & Rocha">
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:8px">
+              <div class="col">
+                <label>Empresa do anestesista</label>
+                <input id="emp_anest" type="text" value="COOPANEST RN">
+              </div>
+              <div class="col">
+                <label>Paciente</label>
+                <input id="paciente" type="text" placeholder="Nome completo do paciente">
+              </div>
+            </div>
+
+            <hr style="margin:12px 0;border:none;border-top:1px solid rgba(255,255,255,0.04)" />
+
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <strong>Procedimentos</strong>
+                <div class="muted" style="margin-top:6px;font-size:0.9rem">Atalhos rápidos abaixo — arraste para reordenar</div>
+              </div>
+              <div style="display:flex;gap:8px">
+                <button type="button" class="small" onclick="duplicarUltima()">Duplicar</button>
+                <button type="button" class="small" onclick="addProc()">Adicionar</button>
+                <button type="button" class="small" style="background:transparent;color:var(--danger);" onclick="limparProcedimentos()">Limpar</button>
+              </div>
+            </div>
+
+            <div class="shortcuts" id="shortcuts" style="margin-top:10px"></div>
+
+            <datalist id="groups-datalist"></datalist>
+
+            <div id="procedimentos-wrap">
+              <div id="procedimentos"></div>
+
+              <div id="procedimentos-placeholder" class="procedimentos-placeholder" style="display:block">
+                <div class="placeholder-title">Nenhum procedimento adicionado</div>
+                <div class="muted">Clique em <strong>Adicionar</strong> ou use os atalhos abaixo para inserir procedimentos rapidamente.</div>
+                <div style="margin-top:12px">
+                  <button class="quick-add" onclick="addProc();">Adicionar procedimento</button>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+              <button class="btn primary" onclick="gerarPdf({preview:true})">Pré-visualizar PDF</button>
+              <button class="btn ghost" onclick="gerarPdf({preview:false})">Gerar e baixar</button>
+              <button class="btn" style="background:transparent;color:var(--accent)" onclick="salvarManualmente()">Salvar</button>
+              <button class="btn" style="background:transparent;color:var(--danger)" onclick="limparTudo()">Resetar tudo</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card" style="position:sticky;top:20px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div><strong>Resumo</strong><div class="muted" style="font-size:0.9rem">Confira antes de gerar</div></div>
+            <div style="text-align:right"><span id="count-proc">0</span> itens</div>
+          </div>
+
+          <div style="margin-top:12px">
+            <div style="padding:10px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));border:1px solid rgba(255,255,255,0.03)">
+              <div style="font-weight:700">Equipe</div>
+              <div class="muted" id="preview-equipe">—</div>
+            </div>
+            <div style="height:10px"></div>
+            <div style="padding:10px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));border:1px solid rgba(255,255,255,0.03)">
+              <div style="font-weight:700">Hospital / Data</div>
+              <div class="muted" id="preview-hospital">—</div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px;display:flex;gap:8px">
+            <button class="small" onclick="salvarManualmente()">Salvar</button>
+            <button class="small" onclick="location.reload()">Recarregar</button>
+          </div>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div class="card">
+          <div style="font-weight:700;margin-bottom:6px">Ajuda rápida</div>
+          <div class="muted">• Use atalhos para inserir rapidamente.<br>• Reordene arrastando.<br>• Cada 5 procedimentos geram 2 páginas (Cirurgia + Anestesia).</div>
+        </div>
+      </div>
+    </div>
+
+    <footer><!-- minimal --></footer>
+  </div>
+
+<script>
+/* ----------------- JS completo ----------------- */
+
+const JSON_FILE = "procedimentos_grupos_I_a_V_FINAL.json";
+const SHORTCUTS = [
+  ["Trombectomia", "TROMBECTOMIA", "Grupo IV"],
+  ["Arteriorrafia", "ARTERIORRAFIA", "Grupo V"],
+  ["Acesso central", "PUNÇÃO PERCUTÂNEA DE VEIA JUGULAR INTERNA", "Grupo I"],
+  ["Desbridamento", "DEBRIDAMENTO CIRÚRGICO (POR UNIDADE TOPOGRÁFICA)", "Grupo II"],
+  ["Instalação PAM", "INSTALAÇÃO / IMPLANTE DE PAM INVASIVA", "Grupo III"]
+];
+const STORAGE_KEY = "sesap_ninja_v1";
+let procedimentosDB = [];
+
+function q(id){ return document.getElementById(id); }
+function escapeHtml(s){ if (!s) return ""; return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;'); }
+function debounce(fn,wait=220){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), wait); }; }
+
+async function carregarDB(){
+  try{
+    const res = await fetch(JSON_FILE);
+    if (!res.ok) throw new Error("JSON não encontrado: " + res.status);
+    procedimentosDB = await res.json();
+    procedimentosDB.forEach(p => p._uc = (p.procedimento||"").toUpperCase());
+    const groups = Array.from(new Set(procedimentosDB.map(p => (p.grupo||"").trim()).filter(Boolean))).sort();
+    const dl = q("groups-datalist");
+    dl.innerHTML = "";
+    groups.forEach(g => { const opt = document.createElement("option"); opt.value = g; dl.appendChild(opt); });
+    renderShortcuts();
+  }catch(e){ console.error("carregarDB:", e); /* fallback: funciona sem JSON */ }
+}
+
+function buscarSugestoes(qstr, max=8){
+  if (!qstr || !procedimentosDB.length) return [];
+  const t = qstr.trim().toUpperCase();
+  const results = procedimentosDB.map(item => {
+    let score = 0;
+    if (item._uc.startsWith(t)) score += 100;
+    if (item._uc.includes(t)) score += 10;
+    score += Math.max(0, 20 - Math.floor(item._uc.length / 20));
+    return { score, item };
+  }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,max).map(x=>x.item);
+  return results;
+}
+
+function attachTypeahead(inputElem, groupInput){
+  const box = document.createElement("div");
+  box.className = "typeahead-box";
+  box.style.display = "none";
+  document.body.appendChild(box);
+
+  let items = []; let highlightIndex = -1;
+  function posicionar(){
+    const r = inputElem.getBoundingClientRect();
+    box.style.left = `${r.left + window.scrollX}px`;
+    box.style.top = `${r.bottom + window.scrollY + 6}px`;
+    box.style.width = `${r.width}px`;
+  }
+  function render(sugs){
+    items = sugs; highlightIndex = -1; box.innerHTML = "";
+    if (!sugs.length){ box.style.display = "none"; return; }
+    sugs.forEach((s,i)=> {
+      const el = document.createElement("div");
+      el.className = "typeahead-item";
+      el.innerHTML = `<div><strong>${escapeHtml(s.procedimento)}</strong></div><div class="typeahead-sub">${escapeHtml(s.grupo)}</div>`;
+      el.addEventListener("mousedown", ev => { ev.preventDefault(); select(i); });
+      box.appendChild(el);
+    });
+    posicionar(); box.style.display = "block";
+  }
+  function highlight(idx){ const children = Array.from(box.children); children.forEach((c,i)=> c.classList.toggle("highlight", i===idx)); highlightIndex = idx; }
+  function select(idx){
+    if (idx<0 || idx>=items.length) return;
+    const sel = items[idx];
+    inputElem.value = sel.procedimento;
+    if (groupInput) groupInput.value = sel.grupo || "";
+    box.style.display = "none";
+    inputElem.focus();
+    salvarNoLocalStorage();
+    toggleProcedimentosPlaceholder();
+  }
+
+  const doSearch = debounce(()=> {
+    const v = inputElem.value.trim();
+    if (!v){ box.style.display = "none"; return; }
+    const sugs = buscarSugestoes(v, 8);
+    render(sugs);
+  }, 160);
+
+  inputElem.addEventListener("input", ()=> doSearch());
+  inputElem.addEventListener("keydown", (ev) => {
+    if (box.style.display === "none") return;
+    if (ev.key === "ArrowDown"){ ev.preventDefault(); highlight(Math.min(highlightIndex+1, items.length-1)); return; }
+    if (ev.key === "ArrowUp"){ ev.preventDefault(); highlight(Math.max(highlightIndex-1, 0)); return; }
+    if (ev.key === "Enter"){ ev.preventDefault(); if (highlightIndex >= 0) select(highlightIndex); }
+    if (ev.key === "Escape"){ box.style.display = "none"; }
+  });
+  window.addEventListener("resize", posicionar);
+  inputElem.addEventListener("blur", ()=> setTimeout(()=> box.style.display='none', 150));
+}
+
+function makeProcedureRow(procText = "", grupoText = ""){
+  const cont = q("procedimentos");
+  const wrapper = document.createElement("div");
+  wrapper.className = "linha-proc"; wrapper.draggable = true;
+  wrapper.innerHTML = `
+    <input name="procedimento" placeholder="Descrição do procedimento" value="${escapeHtml(procText)}">
+    <input name="grupo" list="groups-datalist" placeholder="Grupo (escolha ou edite)" value="${escapeHtml(grupoText)}">
+    <div class="proc-actions">
+      <button class="small" type="button" title="Remover" onclick="(function(el){ el.parentNode.removeChild(el); salvarNoLocalStorage(); updateSidePreview(); toggleProcedimentosPlaceholder(); })(this.closest('.linha-proc'));">✕</button>
+    </div>
+  `;
+  cont.appendChild(wrapper);
+
+  const inp = wrapper.querySelector('input[name="procedimento"]');
+  const grp = wrapper.querySelector('input[name="grupo"]');
+
+  attachTypeahead(inp, grp);
+
+  inp.addEventListener('blur', () => {
+    const v = inp.value.trim().toUpperCase();
+    if (!v){ salvarNoLocalStorage(); return; }
+    const found = procedimentosDB.find(p => p._uc === v);
+    if (found && found.grupo) grp.value = found.grupo;
+    salvarNoLocalStorage();
+  });
+
+  grp.addEventListener('input', ()=> salvarNoLocalStorage());
+  inp.addEventListener('input', ()=> { salvarNoLocalStorage(); updateSidePreview(); });
+
+  wrapper.addEventListener("dragstart",(e)=>{ wrapper.classList.add("dragging"); e.dataTransfer.setData("text/plain","drag"); window._dragSrc = wrapper; });
+  wrapper.addEventListener("dragend",()=>{ wrapper.classList.remove("dragging"); window._dragSrc = null; salvarNoLocalStorage(); });
+  wrapper.addEventListener("dragover",(e)=>{ e.preventDefault(); const src=window._dragSrc; if(!src||src===wrapper) return; const parent=wrapper.parentNode; const rect=wrapper.getBoundingClientRect(); const mid=rect.top+rect.height/2; if (e.clientY<mid) parent.insertBefore(src, wrapper); else parent.insertBefore(src, wrapper.nextSibling); });
+
+  return wrapper;
+}
+
+function addProc(desc="", group=""){ makeProcedureRow(desc, group); salvarNoLocalStorage(); updateSidePreview(); toggleProcedimentosPlaceholder(); }
+function duplicarUltima(){ const nodes = document.querySelectorAll("#procedimentos .linha-proc"); if (!nodes.length) { addProc(); return; } const last = nodes[nodes.length - 1]; const desc = last.querySelector('input[name="procedimento"]').value; const grupo = last.querySelector('input[name="grupo"]').value; addProc(desc, grupo); }
+function limparProcedimentos(){ if (!confirm("Remover todos os procedimentos?")) return; localStorage.removeItem(`${STORAGE_KEY}_procedimentos`); renderProcedimentosUI(); salvarNoLocalStorage(); updateSidePreview(); toggleProcedimentosPlaceholder(); }
+
+function renderProcedimentosUI(){
+  const cont = q("procedimentos"); cont.innerHTML = "";
+  const list = getProcedimentosFromStorage();
+  if (list.length === 0) { toggleProcedimentosPlaceholder(); return; }
+  list.forEach(p => makeProcedureRow(p.descricao, p.grupo));
+}
+
+function toggleProcedimentosPlaceholder(){
+  const cont = q("procedimentos");
+  const placeholder = q("procedimentos-placeholder");
+  const has = cont.querySelectorAll(".linha-proc").length > 0;
+  placeholder.style.display = has ? "none" : "block";
+}
+
+function getProcedimentosFromStorage(){
+  try{ const raw = localStorage.getItem(`${STORAGE_KEY}_procedimentos`); if (!raw) return []; return JSON.parse(raw); } catch(e){ return []; }
+}
+
+function getProcedimentosFromUI(){
+  const nodes = document.querySelectorAll("#procedimentos .linha-proc");
+  const out = [];
+  nodes.forEach(n=>{
+    const desc = n.querySelector('input[name="procedimento"]').value.trim();
+    const grp = n.querySelector('input[name="grupo"]').value.trim();
+    if (desc || grp) out.push({descricao: desc, grupo: grp});
+  });
+  q("count-proc").innerText = out.length;
+  return out;
+}
+
+function salvarNoLocalStorage(){
+  try{
+    const state = {
+      hospital: q("hospital").value,
+      data: q("data").value,
+      cirurgiao: getCirurgiaoValueForSave(),
+      auxiliar: getAuxiliarValueForSave(),
+      anest: getAnestValueForSave(),
+      emp_cir: q("emp_cir").value,
+      emp_anest: q("emp_anest").value,
+      paciente: q("paciente").value,
+      procedimentos: getProcedimentosFromUI()
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    localStorage.setItem(`${STORAGE_KEY}_procedimentos`, JSON.stringify(state.procedimentos));
+    updateSidePreview();
+  }catch(e){ console.warn(e); }
+}
+
+function carregarDoLocalStorage(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const s = JSON.parse(raw);
+    if (s.hospital) q("hospital").value = s.hospital;
+    if (s.data) q("data").value = s.data;
+    if (s.emp_cir) q("emp_cir").value = s.emp_cir;
+    if (s.emp_anest) q("emp_anest").value = s.emp_anest;
+    if (s.paciente) q("paciente").value = s.paciente;
+
+    if (s.cirurgiao !== undefined){
+      const opts = ["José Augusto","Harue Kumakura","José Linhares","Yuri Lourenço"];
+      if (opts.includes(s.cirurgiao)){ q("cirurgiao_select").value = s.cirurgiao; q("cirurgiao-other").style.display = "none"; q("cirurgiao_outro").value=""; }
+      else if (s.cirurgiao === ""){ q("cirurgiao_select").value = "José Augusto"; q("cirurgiao-other").style.display = "none"; q("cirurgiao_outro").value=""; }
+      else { q("cirurgiao_select").value="__outro__"; q("cirurgiao-other").style.display="block"; q("cirurgiao_outro").value = s.cirurgiao; }
+    }
+
+    if (s.auxiliar !== undefined){
+      const opts = ["Harue Kumakura","José Linhares","Yuri Lourenço"];
+      if (opts.includes(s.auxiliar)){ q("aux_select").value = s.auxiliar; q("aux-other").style.display="none"; q("aux_outro").value = ""; }
+      else if (s.auxiliar === ""){ q("aux_select").value = ""; q("aux-other").style.display="none"; q("aux_outro").value = ""; }
+      else { q("aux_select").value="__outro__"; q("aux-other").style.display="block"; q("aux_outro").value = s.auxiliar; }
+    }
+
+    if (s.anest !== undefined){
+      const opts = ["Thiago José","Bruno Sinedino"];
+      if (opts.includes(s.anest)){ q("anest_select").value = s.anest; q("anest-other").style.display="none"; q("anest_outro").value=""; }
+      else if (s.anest === ""){ q("anest_select").value = "Thiago José"; q("anest-other").style.display="none"; q("anest_outro").value=""; }
+      else { q("anest_select").value="__outro__"; q("anest-other").style.display="block"; q("anest_outro").value = s.anest; }
+    }
+
+    if (Array.isArray(s.procedimentos) && s.procedimentos.length) localStorage.setItem(`${STORAGE_KEY}_procedimentos`, JSON.stringify(s.procedimentos));
+  }catch(e){ console.warn("load err", e); }
+}
+
+function salvarManualmente(){ salvarNoLocalStorage(); alert("Salvo localmente."); }
+function limparTudo(){ if (!confirm("Resetar tudo para os padrões?")) return; localStorage.removeItem(STORAGE_KEY); localStorage.removeItem(`${STORAGE_KEY}_procedimentos`); q("hospital").value = "HOSPITAL RIO GRANDE"; const hoje = new Date(); q("data").value = `${hoje.getFullYear()}-${String(hoje.getMonth()+1).padStart(2,"0")}-${String(hoje.getDate()).padStart(2,"0")}`; q("cirurgiao_select").value = "José Augusto"; q("cirurgiao_outro").value=""; q("cirurgiao-other").style.display="none"; q("aux_select").value=""; q("aux_outro").value=""; q("aux-other").style.display="none"; q("anest_select").value="Thiago José"; q("anest_outro").value=""; q("anest-other").style.display="none"; q("emp_cir").value = "Targino & Rocha"; q("emp_anest").value="COOPANEST RN"; q("paciente").value=""; localStorage.removeItem(`${STORAGE_KEY}_procedimentos`); renderProcedimentosUI(); salvarNoLocalStorage(); updateSidePreview(); }
+
+function hookDropdowns(){
+  const cs = q("cirurgiao_select"), co = q("cirurgiao_outro"), cirWrap = q("cirurgiao-other");
+  const asel = q("aux_select"), aout = q("aux_outro"), auxWrap = q("aux-other");
+  const an = q("anest_select"), anout = q("anest_outro"), anWrap = q("anest-other");
+
+  cs.addEventListener("change", ()=>{
+    if (cs.value === "__outro__") {
+      cirWrap.style.display = "block";
+      setTimeout(()=>{ co.focus(); co.select(); }, 40);
+    } else {
+      cirWrap.style.display = "none";
+      co.value = "";
+    }
+    salvarNoLocalStorage(); updateSidePreview();
+  });
+
+  asel.addEventListener("change", ()=>{
+    if (asel.value === "__outro__") {
+      auxWrap.style.display = "block";
+      setTimeout(()=>{ aout.focus(); aout.select(); }, 40);
+    } else {
+      auxWrap.style.display = "none";
+      aout.value = "";
+    }
+    salvarNoLocalStorage(); updateSidePreview();
+  });
+
+  an.addEventListener("change", ()=>{
+    if (an.value === "__outro__") {
+      anWrap.style.display = "block";
+      setTimeout(()=>{ anout.focus(); anout.select(); }, 40);
+    } else {
+      anWrap.style.display = "none";
+      anout.value = "";
+    }
+    salvarNoLocalStorage(); updateSidePreview();
+  });
+
+  requestAnimationFrame(()=>{
+    if (cs.value === "__outro__") { cirWrap.style.display="block"; if (co.value) { co.focus(); co.select(); } }
+    if (asel.value === "__outro__") { auxWrap.style.display="block"; if (aout.value) { aout.focus(); aout.select(); } }
+    if (an.value === "__outro__") { anWrap.style.display="block"; if (anout.value) { anout.focus(); anout.select(); } }
+  });
+
+  co.addEventListener("input", ()=>{ salvarNoLocalStorage(); updateSidePreview(); });
+  aout.addEventListener("input", ()=>{ salvarNoLocalStorage(); updateSidePreview(); });
+  anout.addEventListener("input", ()=>{ salvarNoLocalStorage(); updateSidePreview(); });
+}
+
+function getCirurgiaoValueForSave(){ const sel=q("cirurgiao_select").value; if(sel==="__outro__") return q("cirurgiao_outro").value.trim(); return sel; }
+function getAuxiliarValueForSave(){ const sel=q("aux_select").value; if(sel==="__outro__") return q("aux_outro").value.trim(); return sel; }
+function getAnestValueForSave(){ const sel=q("anest_select").value; if(sel==="__outro__") return q("anest_outro").value.trim(); return sel; }
+
+function updateSidePreview(){
+  const cir = getCirurgiaoValueForSave() || "—";
+  const aux = getAuxiliarValueForSave() || "—";
+  const anest = getAnestValueForSave() || "—";
+  q("preview-equipe").innerText = `Cirurgião: ${cir} • Auxiliar: ${aux} • Anest.: ${anest}`;
+  q("preview-hospital").innerText = `${q("hospital").value || "—"} • ${q("data").value || "—"}`;
+  q("count-proc").innerText = getProcedimentosFromUI().length;
+}
+
+function renderShortcuts(){
+  const box = q("shortcuts"); box.innerHTML = "";
+  SHORTCUTS.forEach(([label, procText, fallbackGroup])=>{
+    const btn = document.createElement("button");
+    btn.className = "shortcut";
+    btn.type = "button";
+    btn.innerText = label;
+    btn.addEventListener("click", ()=>{
+      const found = procedimentosDB.find(p => p.procedimento.toUpperCase() === (procText || "").toUpperCase());
+      if (found) addProc(found.procedimento, found.grupo || fallbackGroup);
+      else addProc(procText || label, fallbackGroup || "");
+    });
+    box.appendChild(btn);
+  });
+}
+
+function attachAutoSaveHandlers(){
+  const inputs = Array.from(document.querySelectorAll("input, select"));
+  inputs.forEach(inp => inp.addEventListener("input", () => {
+    if (window._saveTimer) clearTimeout(window._saveTimer);
+    window._saveTimer = setTimeout(()=>{ const procs = getProcedimentosFromUI(); localStorage.setItem(`${STORAGE_KEY}_procedimentos`, JSON.stringify(procs)); salvarNoLocalStorage(); }, 300);
+  }));
+}
+
+/* ---------- redução agressiva de fonte e quebra ---------- */
+function computeFontSizeForField(fieldType, text) {
+  const len = (text||"").length;
+  if (fieldType === "procedimento") {
+    if (len <= 12) return 11.0;
+    if (len <= 24) return 10.0;
+    if (len <= 40) return 9.0;
+    if (len <= 70) return 8.0;
+    if (len <= 110) return 7.0;
+    if (len <= 160) return 6.0;
+    if (len <= 250) return 4.0;
+    return 2.0; // máximo de compressão
+  }
+  if (fieldType === "paciente") {
+    if (len <= 16) return 11.0;
+    if (len <= 28) return 10.0;
+    if (len <= 44) return 9.0;
+    if (len <= 70) return 8.0;
+    if (len <= 110) return 7.0;
+    if (len <= 180) return 5.0;
+    return 2.0; // mínimo extremo para nomes muito longos
+  }
+  if (fieldType === "grupo") {
+    if (len <= 12) return 9.5;
+    if (len <= 20) return 8.5;
+    return 7.0;
+  }
+  if (len <= 28) return 10;
+  if (len <= 50) return 9;
+  return 8;
+}
+function breakLongText(text, maxCharsPerLine = 24) {
+  if (!text) return "";
+  const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  const out = [];
+  for (const line of lines) {
+    let cur = "";
+    const words = line.split(/\s+/);
+    for (let w = 0; w < words.length; w++) {
+      const word = words[w];
+      if ((cur + " " + word).trim().length <= maxCharsPerLine) {
+        cur = (cur + " " + word).trim();
+      } else {
+        if (cur) out.push(cur);
+        if (word.length > maxCharsPerLine) {
+          for (let i=0;i<word.length;i+=maxCharsPerLine) {
+            out.push(word.slice(i,i+maxCharsPerLine));
+          }
+          cur = "";
+        } else {
+          cur = word;
+        }
+      }
+    }
+    if (cur) out.push(cur);
+  }
+  return out.join("\n");
+}
+
+/* ---------- init ---------- */
+document.addEventListener("DOMContentLoaded", async ()=>{
+  await carregarDB();
+  carregarDoLocalStorage();
+  renderProcedimentosUI();
+  attachAutoSaveHandlers();
+  hookDropdowns();
+  renderShortcuts();
+  updateSidePreview();
+});
+
+/* ---------- geração do PDF (usa computeFontSizeForField e breakLongText) ---------- */
+async function gerarPdf({ preview = false } = {}) {
+  const { PDFDocument } = PDFLib;
+
+  const hospitalVal = q("hospital").value;
+  const dataInput = q("data").value;
+  const cirurgiaoVal = getCirurgiaoValueForSave();
+  const auxiliarVal = getAuxiliarValueForSave();
+  const anestVal = getAnestValueForSave();
+  const empCirVal = q("emp_cir").value;
+  const empAnestVal = q("emp_anest").value;
+  const pacienteVal = q("paciente").value;
+
+  if (!pacienteVal) { alert("Informe o nome do paciente."); return; }
+
+  let dataStr = "";
+  if (dataInput) { const [yyyy,mm,dd] = dataInput.split("-"); dataStr = `${dd}/${mm}/${yyyy}`; }
+
+  const equipeTexto = `Cirurgião: ${cirurgiaoVal} / Auxiliar: ${auxiliarVal} / Anest.: ${anestVal}`;
+  const procedimentos = getProcedimentosFromUI();
+  if (!procedimentos.length) { alert("Informe pelo menos 1 procedimento."); return; }
+
+  salvarNoLocalStorage();
+
+  let templateBytes;
+  try {
+    templateBytes = await fetch("sesap.pdf").then(r => { if (!r.ok) throw new Error("sesap.pdf não encontrado (verifique caminho)"); return r.arrayBuffer(); });
+  } catch(e) { alert("Erro carregando sesap.pdf: " + e.message); return; }
+
+  const docFinal = await PDFDocument.create();
+
+  function em_blocos(lista, tam=5){ const out=[]; for (let i=0;i<lista.length;i+=tam) out.push(lista.slice(i,i+tam)); return out; }
+
+  async function adicionarPagina(tipo, bloco){
+    const tempDoc = await PDFDocument.load(templateBytes);
+    const form = tempDoc.getForm();
+
+    const fHospital = form.getTextField("HOSPITAL");
+    const fEmpresa = form.getTextField("EMPRESA");
+    const fData = form.getTextField("DATA");
+    const fEquipe = form.getTextField("EQUIPE");
+
+    fHospital.setText(hospitalVal||""); try{ fHospital.setFontSize(11); }catch(e){}
+    fEmpresa.setText(tipo==="cirurgia" ? (empCirVal||"") : (empAnestVal||"")); try{ fEmpresa.setFontSize(11); }catch(e){}
+    fData.setText(dataStr||""); try{ fData.setFontSize(10); }catch(e){}
+    fEquipe.setText(equipeTexto||""); try{ fEquipe.setFontSize(9); }catch(e){}
+
+    for (let i=0;i<5;i++){
+      const idx = i+1; const suf = String(idx).padStart(2,"0"); const linha = bloco[i];
+      const campoProc = form.getTextField(`PROCEDIMENTO_${suf}`);
+      const campoPac = form.getTextField(`PACIENTE${suf}`);
+      const campoGrupo = form.getTextField(`GRUPOP${idx}`);
+      const campoMedPrinc = form.getTextField(`MEDICO_PRINC_${suf}`);
+      const campoMedAux = form.getTextField(`MEDICO_AUX_${suf}`);
+
+      try{ if (campoProc.enableMultiline) campoProc.enableMultiline(); }catch(e){}
+
+      if (linha && linha.descricao){
+        const rawProcText = linha.descricao.trim();
+        const procBroken = breakLongText(rawProcText, 24); // mais quebras
+        const pacientText = pacienteVal;
+        const grupoText = linha.grupo || "";
+
+        const fsizeProc = computeFontSizeForField("procedimento", rawProcText);
+        const fsizePac = computeFontSizeForField("paciente", pacientText);
+        const fsizeGrupo = computeFontSizeForField("grupo", grupoText);
+
+        try{ campoProc.setFontSize(fsizeProc); }catch(e){}
+        try{ campoPac.setFontSize(fsizePac); }catch(e){}
+        try{ campoGrupo.setFontSize(fsizeGrupo); }catch(e){}
+
+        campoProc.setText(procBroken);
+        try{ if (campoPac.enableMultiline) campoPac.enableMultiline(); }catch(e){}
+        const pacienteBroken = breakLongText(pacienteVal || "", 20);
+        campoPac.setText(pacienteBroken);
+        campoGrupo.setText(grupoText);
+
+        if (tipo==="cirurgia"){
+          try{ campoMedPrinc.setFontSize(computeFontSizeForField("medico", cirurgiaoVal)); }catch(e){}
+          try{ campoMedAux.setFontSize(computeFontSizeForField("medico", auxiliarVal)); }catch(e){}
+          campoMedPrinc.setText(cirurgiaoVal||""); campoMedAux.setText(auxiliarVal||"");
+        } else {
+          try{ campoMedPrinc.setFontSize(computeFontSizeForField("medico", anestVal)); }catch(e){}
+          try{ campoMedAux.setFontSize(computeFontSizeForField("medico", "")); }catch(e){}
+          campoMedPrinc.setText(anestVal||""); campoMedAux.setText("");
+        }
+      } else {
+        campoProc.setText(""); campoPac.setText(""); campoGrupo.setText(""); campoMedPrinc.setText(""); campoMedAux.setText("");
+      }
+    }
+
+    try{ form.flatten(); }catch(e){}
+    const [page] = await docFinal.copyPages(tempDoc, [0]);
+    docFinal.addPage(page);
+  }
+
+  const blocos = em_blocos(procedimentos, 5);
+  for (const bloco of blocos){ await adicionarPagina("cirurgia", bloco); await adicionarPagina("anestesia", bloco); }
+
+  const pdfBytes = await docFinal.save();
+  const blob = new Blob([pdfBytes], { type: "application/pdf" });
+  const url = URL.createObjectURL(blob);
+
+  if (preview) {
+    window.open(url, "_blank");
+    setTimeout(()=>URL.revokeObjectURL(url),30000);
+  } else {
+    const a = document.createElement("a"); a.href=url; a.download="faturamento_sesap.pdf"; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),2000);
+  }
+}
+</script>
+</body>
+</html>
